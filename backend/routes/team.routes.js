@@ -1,8 +1,9 @@
+const isAuthenticated = require("../middlewares/isAuthenticated");
 const TeamController = require("../controllers/TeamController");
 const isManager = require("../middlewares/isManager");
 const router = require("express").Router();
 
-router.post("/create", isManager, TeamController.createTeam);
+router.post("/create", isAuthenticated, isManager, TeamController.createTeam);
 router.get("/get", TeamController.getTeams);
 router.get("/get/:id", TeamController.getTeam);
 // router.post("/add-members/:id", isManager, TeamController.addMembers);

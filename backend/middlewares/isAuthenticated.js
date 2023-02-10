@@ -9,6 +9,7 @@ const isAuthenticated = (req, res, next) => {
     let decoded = jwt.verify(token, JWT_SECRET);
 
     if (decoded.role === "employee" || decoded.role === "manager") {
+      console.log(decoded);
       req.user = decoded;
       next();
     } else {

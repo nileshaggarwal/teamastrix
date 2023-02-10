@@ -5,6 +5,7 @@ import { Disclosure, Transition } from "@headlessui/react";
 import { BsDashLg } from "react-icons/bs";
 
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
+import Header from "../Header";
 
 const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   console.log(chosenMenu, "chosenmeny", value);
@@ -16,9 +17,7 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   return (
     <div className="py-3 px-3 ">
       <button
-        onClick={() =>
-          setChosenMenu ? setChosenMenu(value) : changeLocation(value)
-        }
+        onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
         className={
           "flex items-center justify-start space-x-1 text-gray-600 hover:text-blue-500 " +
           (value === chosenMenu && "text-blue-600")
@@ -31,14 +30,7 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   );
 };
 
-const Layout = ({
-  children,
-  chosenMenu,
-  setChosenMenu,
-  createStore,
-  isOpen,
-  isOpen2,
-}) => {
+const Layout = ({ children, chosenMenu, setChosenMenu, createStore, isOpen, isOpen2 }) => {
   useEffect(() => {
     let gotovalue = localStorage.getItem("gotovalue");
     if (gotovalue) {
@@ -49,6 +41,7 @@ const Layout = ({
 
   return (
     <div className="flex flex-col h-screen ">
+      <Header />
       <div className="w-full h-full grow bg-gray-100 flex divide-x-2 divide-gray-300 overflow-y-hidden">
         <div
           style={{ zIndex: 15000 }}
@@ -62,9 +55,7 @@ const Layout = ({
             {({ open }) => (
               <>
                 <Disclosure.Button
-                  className={
-                    "py-2 px-3 w-full text-left flex justify-between items-center "
-                  }
+                  className={"py-2 px-3 w-full text-left flex justify-between items-center "}
                 >
                   <div className="flex items-center">
                     <CgOrganisation className="mr-1 text-2xl" />
@@ -92,7 +83,7 @@ const Layout = ({
                       chosenMenu={chosenMenu}
                       icon={<BsDashLg className="text-xs ml-4" />}
                       setChosenMenu={setChosenMenu}
-                      value="Notifications"
+                      value="notifications"
                       option={"Notifications"}
                     />
                     <Option
