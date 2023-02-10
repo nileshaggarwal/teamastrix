@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createTeam } from "../../Helpers/teams";
 import SubHeader from "../SubHeader";
 import { departments } from "./departments";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
 import { AiOutlineUser, AiFillStar } from "react-icons/ai";
+import { getEmployees } from "../../Helpers/employee";
 
 const AddTeam = () => {
   const [team, setTeam] = useState({
@@ -14,6 +15,7 @@ const AddTeam = () => {
     teamMembers: [],
   });
   const [teamLeader, setteamLeader] = useState("");
+  const [employees, setEmployees] = useState([]);
 
   async function handleValueChange(value, name) {
     setTeam({ ...team, [name]: value });
@@ -73,32 +75,43 @@ const AddTeam = () => {
     },
   ];
 
+  const getAllMembers = async () => {
+    let members = await getEmployees();
+    console.log(members, "members");
+    setEmployees(members);
+  };
+
+  useEffect(() => {
+    getAllMembers();
+  }, []);
+
+  console.log(employees, "employees");
+
   async function handleMemberClick(member) {
-    if (team.teamMembers.findIndex((x) => x.name === member.name) !== -1) {
+    if (team.teamMembers.findIndex((x) => x === member._id) !== -1) {
       setTeam({
         ...team,
-        teamMembers: team.teamMembers.filter(
-          (item) => item.name !== member.name
-        ),
+        teamMembers: team.teamMembers.filter((item) => item !== member._id),
       });
-      if (teamLeader.name === member.name) {
+      if (teamLeader === member._id) {
         setteamLeader({});
       }
     } else {
-      setTeam({ ...team, teamMembers: [...team.teamMembers, member] });
+      setTeam({ ...team, teamMembers: [...team.teamMembers, member._id] });
     }
   }
 
   async function handleSubmit() {
     console.log(team);
-    let result = await createTeam(team.name, team.description, team.department);
+    let result = await createTeam(team.name, team.description, team.teamMembers, teamLeader);
     console.log(result, "result");
     if (result) {
       setTeam({
         name: "",
-        department: "",
+        teamMembers: [],
         description: "",
       });
+      setteamLeader("");
     }
   }
 
@@ -109,7 +122,7 @@ const AddTeam = () => {
         break;
       }
       case 2: {
-        setteamLeader(member);
+        setteamLeader(member._id);
         break;
       }
 
@@ -118,6 +131,9 @@ const AddTeam = () => {
       }
     }
   };
+
+  console.log(team, "team");
+  console.log(teamLeader, "teamLeader");
 
   return (
     <>
@@ -139,43 +155,35 @@ const AddTeam = () => {
             value={team.description}
             name="description"
           />
-          <Dropdown
+          {/* <Dropdown
             list={departments}
             label={"Choose Department"}
             handleChange={handleValueChange}
             name="department"
-          />
+          /> */}
           <div>
-            <label className="ml-3 mt-3 mb-3 font-semibold font-mono">
-              Choose team members
-            </label>
-            <span className="text-xs">
-              (Double tap on profile to choose team leader)
-            </span>
+            <label className="ml-3 mt-3 mb-3 font-semibold font-mono">Choose team members</label>
+            <span className="text-xs">(Double tap on profile to choose team leader)</span>
             <div className="flex items-center flex-wrap w-full ">
-              {teamMembers.map((member, index) => {
+              {employees.map((member, index) => {
                 return (
                   <div
                     onClick={(e) => handleClick(e, member)}
                     className={
                       "border relative cursor-pointer basis-1/6 m-2 border-dashed flex flex-col items-center space-y-2 rounded-md px-4 py-3 " +
-                      (team.teamMembers.findIndex(
-                        (x) => x.name === member.name
-                      ) !== -1
-                        ? teamLeader.name === member.name
+                      (team.teamMembers.findIndex((x) => x === member._id) !== -1
+                        ? teamLeader === member._id
                           ? "bg-green-100 border-green-600 text-blue-700"
                           : "bg-blue-100 border-green-600 text-blue-500"
                         : "bg-white border-gray-600")
                     }
                     key={index}
                   >
-                    {teamLeader.name === member.name && (
+                    {teamLeader === member._id && (
                       <AiFillStar className="text-2xl text-yellow-500 absolute top-0 right-0 translate-x-1/2 -translate-y-1/2" />
                     )}
                     <AiOutlineUser className="text-3xl " />
-                    <p className="break-words text-sm font-medium">
-                      {member.name}
-                    </p>
+                    <p className="break-words text-sm font-medium">{member.name}</p>
                   </div>
                 );
               })}

@@ -124,6 +124,7 @@ const AddEmployee = () => {
             list={departments}
             label={"Choose Department"}
             handleChange={handleValueChange}
+            type={"addemployee"}
             name="department"
           />
           <button
