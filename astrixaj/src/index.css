@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.noscrollbar::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 10px;
+}
+
+.noscrollbar::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 10px;
+}
+
+.noscrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.height {
+  min-height: 60vh;
+  height: 80vh;
+}
+
+@media only screen and (max-width: 768px) {
+  .height {
+    height: 75vh;
+  }
+}
+
+@media only screen and (max-width: 467px) {
+  .height {
+    height: 70vh;
+  }
+}
