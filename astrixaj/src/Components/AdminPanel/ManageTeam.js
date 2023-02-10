@@ -52,7 +52,7 @@ const ManageTeam = () => {
               <tr className="text-sm font-thin">
                 <th className="font-normal py-3">Team Name</th>
                 <th className="font-normal py-3 w-[200px]">No. of members</th>
-                <th className="font-normal py-3">Department</th>
+                {/* <th className="font-normal py-3">Department</th> */}
                 <th className="font-normal py-3 w-[100px]">Status</th>
                 <th className="font-normal py-3">Actions</th>
               </tr>
@@ -66,7 +66,7 @@ const ManageTeam = () => {
                       <td className="text-sm  py-3 text-gray-500 w-[200px]">
                         {team.members.length}
                       </td>
-                      <td className="text-sm  py-3 text-gray-500">{team.department}</td>
+                      {/* <td className="text-sm  py-3 text-gray-500">{team.department}</td> */}
                       <td className="text-sm  py-3 text-gray-500   ">
                         <span
                           className={`border px-3 py-1 rounded-full font-bold w-[100px] ${
