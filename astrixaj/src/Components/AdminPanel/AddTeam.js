@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createTeam } from "../../Helpers/teams";
 import SubHeader from "../SubHeader";
+import { departments } from "./departments";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
 import { AiOutlineUser, AiFillStar } from "react-icons/ai";
@@ -18,10 +19,6 @@ const AddTeam = () => {
     setTeam({ ...team, [name]: value });
   }
 
-  async function handleSubmit() {
-    console.log(team);
-  }
-
   const teamMembers = [
     {
       name: "Lando Norris",
@@ -35,22 +32,22 @@ const AddTeam = () => {
       name: "Charles Leclerc",
       role: "Member",
     },
-   { name: "Lewis Hamilton",
-    role: "Member",
-  },
-  {
-    name: "Valtteri Bottas",
-    role: "Member",
-  },
-  {
-    name: "Sergio Perez",
-    role: "Member",
-  },
-  {
-    name: "Carlos Sainz",
-    role: "Member",
-  },]
-   const departments= [{
+    { name: "Lewis Hamilton", role: "Member" },
+    {
+      name: "Valtteri Bottas",
+      role: "Member",
+    },
+    {
+      name: "Sergio Perez",
+      role: "Member",
+    },
+    {
+      name: "Carlos Sainz",
+      role: "Member",
+    },
+  ];
+  const departments = [
+    {
       name: "Strategy",
       value: "strategy",
     },
@@ -75,6 +72,22 @@ const AddTeam = () => {
       value: "engineering",
     },
   ];
+
+  async function handleMemberClick(member) {
+    if (team.teamMembers.findIndex((x) => x.name === member.name) !== -1) {
+      setTeam({
+        ...team,
+        teamMembers: team.teamMembers.filter(
+          (item) => item.name !== member.name
+        ),
+      });
+      if (teamLeader.name === member.name) {
+        setteamLeader({});
+      }
+    } else {
+      setTeam({ ...team, teamMembers: [...team.teamMembers, member] });
+    }
+  }
 
   async function handleSubmit() {
     console.log(team);
