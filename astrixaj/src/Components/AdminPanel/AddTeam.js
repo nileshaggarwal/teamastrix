@@ -112,6 +112,7 @@ const AddTeam = () => {
         description: "",
       });
       setteamLeader("");
+      getAllMembers();
     }
   }
 
@@ -162,9 +163,18 @@ const AddTeam = () => {
             name="department"
           /> */}
           <div>
-            <label className="ml-3 mt-3 mb-3 font-semibold font-mono">Choose team members</label>
-            <span className="text-xs">(Double tap on profile to choose team leader)</span>
+            <label className="ml-3 mt-3 mb-3 text-xl font-semibold font-mono">
+              Choose team members
+            </label>
+            <span className="text-sm ml-3 font-semibold text-green-700">
+              (Double tap on profile to choose team leader)
+            </span>
             <div className="flex items-center flex-wrap w-full ">
+              {employees.length === 0 && (
+                <p className="text-center text-pink-500 w-full my-8 font-semibold">
+                  No employees found. Please add employees first.
+                </p>
+              )}
               {employees.map((member, index) => {
                 return (
                   <div
@@ -183,7 +193,12 @@ const AddTeam = () => {
                       <AiFillStar className="text-2xl text-yellow-500 absolute top-0 right-0 translate-x-1/2 -translate-y-1/2" />
                     )}
                     <AiOutlineUser className="text-3xl " />
-                    <p className="break-words text-sm font-medium">{member.name}</p>
+                    <div className="flex items-center flex-col justify-center">
+                      <p className="break-words text-sm font-medium">{member.name}</p>
+                      <p className="break-words text-xs font-medium text-center text-blue-500">
+                        {member.designation}
+                      </p>
+                    </div>{" "}
                   </div>
                 );
               })}
