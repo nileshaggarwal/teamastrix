@@ -17,6 +17,15 @@ const userSchema = new mongoose.Schema({
   department: {
     type: String,
   },
+  assigned_to_team: {
+    type: Boolean,
+    default: false,
+  },
+  current_team: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Team",
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", userSchema);

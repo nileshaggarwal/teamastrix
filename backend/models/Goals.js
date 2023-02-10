@@ -16,6 +16,12 @@ const goalSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Goal",
     },
+    target_value: String,
+    target_type: {
+      type: String,
+      enum: ["percentage", "number", "currency"],
+    },
+    due_date: Date,
   },
   key_results: [
     {
@@ -33,6 +39,8 @@ const goalSchema = new mongoose.Schema({
         enum: ["percentage", "number", "currency"],
       },
       value: String,
+      target_value: String,
+      due_date: Date,
     },
   ],
 });

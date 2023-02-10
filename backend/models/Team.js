@@ -16,6 +16,14 @@ const teamSchema = new mongoose.Schema({
   department: {
     type: String,
   },
+  is_active: {
+    type: Boolean,
+    default: true,
+  },
+  leader: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const Team = mongoose.model("Team", teamSchema);

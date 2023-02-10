@@ -8,4 +8,6 @@ router.post("/login", UserController.login);
 router.post("/add", isManager, UserController.addEmployee);
 router.put("/change-password/:id", UserController.ResetPassword);
 
+router.get("/get/:department", UserController.getEmployeesByDepartment);
+
 module.exports = router;

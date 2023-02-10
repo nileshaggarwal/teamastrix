@@ -135,6 +135,16 @@ class UserController {
 
     return HelperResponse.success(res, "Password changed successfully", user);
   });
+
+  static getEmployeesByDepartment = catchAsync(async (req, res, next) => {
+    let { department } = req.params;
+
+    let employees = await User.find({
+      $and: [{ department: department }, { role: "employee" }],
+    });
+
+    return HelperResponse.success(res, "Employees fetched successfully", employees);
+  });
 }
 
 module.exports = UserController;
