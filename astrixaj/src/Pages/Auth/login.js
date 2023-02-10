@@ -59,11 +59,16 @@ const Login = () => {
             <br />
           </section>
         ) : (
-          <div className="text-sm text-center mt-4">Login with your email & password</div>
+          <div className="text-sm text-center mt-4">
+            Login with your email & password
+          </div>
         )}
         <form className="mt-6">
           <div className="mb-2">
-            <label for="email" className=" block text-sm font-semibold text-gray-800">
+            <label
+              for="email"
+              className=" block text-sm font-semibold text-gray-800"
+            >
               Email*
             </label>
             <input
@@ -79,7 +84,10 @@ const Login = () => {
             />
           </div>
           <div className="mb-2">
-            <label for="password" className="block text-sm font-semibold text-gray-800">
+            <label
+              for="password"
+              className="block text-sm font-semibold text-gray-800"
+            >
               Password
             </label>
             <div className="relative">
@@ -93,7 +101,10 @@ const Login = () => {
                 }}
                 defaultValue={values.password}
               />
-              <div className="absolute top-3 right-1" onClick={handleClickShowPassword}>
+              <div
+                className="absolute top-3 right-1"
+                onClick={handleClickShowPassword}
+              >
                 {values.showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
               </div>
             </div>
@@ -101,7 +112,10 @@ const Login = () => {
 
           <div className="flex items-center justify-end">
             <div className="">
-              <a href="#" className="text-right justify-end  text-xs text-black hover:underline">
+              <a
+                href="#"
+                className="text-right justify-end  text-xs text-black hover:underline"
+              >
                 Forget Password?
               </a>
             </div>
@@ -117,7 +131,7 @@ const Login = () => {
           </div>
         </form>
 
-        <div className="relative flex items-center justify-center  mt-6 border border-t">
+        {/* <div className="relative flex items-center justify-center  mt-6 border border-t">
           <div className="absolute px-5 bg-white">Or</div>
         </div>
 
@@ -127,7 +141,7 @@ const Login = () => {
           <Link to="/register" className="font-medium text-black hover:underline">
             Register
           </Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );

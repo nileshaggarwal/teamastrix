@@ -2,11 +2,11 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { API } from "../backend";
 
-export const createTeam = (name, description, department) => {
+export const createTeam = (name, description, members, leader) => {
   return axios
     .post(
       `${API}/team/create`,
-      { name, description, department },
+      { name, description, members, leader },
       {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,

@@ -26,3 +26,17 @@ export const addEmployee = (name, email, department, designation) => {
       toast.error(err.response.data.message);
     });
 };
+
+export const getEmployees = () => {
+  return axios
+    .get(`${API}/user/get/all`)
+    .then((res) => {
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err.response.data.message);
+    });
+};

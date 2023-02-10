@@ -5,8 +5,10 @@ import { BsDashLg, BsFillPersonPlusFill } from "react-icons/bs";
 import { GoDashboard } from "react-icons/go";
 import { AiOutlineTeam } from "react-icons/ai";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
-
+import { GiFlagObjective } from "react-icons/gi";
 import Header from "./Header";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../Helpers/auth";
 
 const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   async function changeLocation(value) {
@@ -16,10 +18,14 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   return (
     <div className="py-3 px-3 space-x-3 ">
       <button
-        onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
+        onClick={() =>
+          setChosenMenu ? setChosenMenu(value) : changeLocation(value)
+        }
         className={
           "flex text-left items-center justify-between space-x-1 hover:text-blue-500 " +
-          (chosenMenu && value === chosenMenu ? "text-blue-600" : "text-gray-600")
+          (chosenMenu && value === chosenMenu
+            ? "text-blue-600"
+            : "text-gray-600")
         }
       >
         {icon}
@@ -30,6 +36,14 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
 };
 
 const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
+  const router = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router("/login");
+    }
+  }, []);
+
   useEffect(() => {
     let gotovalue = localStorage.getItem("gotovalue");
     if (gotovalue) {
@@ -95,6 +109,43 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
                       setChosenMenu={setChosenMenu}
                       value="manageTeam"
                       option={"Manage Teams"}
+                    />
+                  </Disclosure.Panel>
+                </Transition>
+              </>
+            )}
+          </Disclosure>
+          <label className="ml-3 mt-3 mb-3 font-bold font-mono">OKR's</label>
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button
+                  className={
+                    "py-2 px-3 w-full text-left flex justify-between items-center " +
+                    (open && "bg-purple-100")
+                  }
+                >
+                  <div className="flex items-center">
+                    <GiFlagObjective className="mr-1 text-2xl" />
+                    <span>OKR's</span>
+                  </div>
+                  {open ? <IoMdArrowDropdown /> : <IoMdArrowDropright />}
+                </Disclosure.Button>
+                <Transition
+                  enter="transition duration-100 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition duration-75 ease-out"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
+                >
+                  <Disclosure.Panel static className="text-gray-500">
+                    <Option
+                      chosenMenu={chosenMenu}
+                      icon={<BsDashLg className="text-xs ml-4" />}
+                      setChosenMenu={setChosenMenu}
+                      value="manageOKR"
+                      option={"Manage OKR's"}
                     />
                   </Disclosure.Panel>
                 </Transition>

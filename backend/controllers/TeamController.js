@@ -15,12 +15,13 @@ const sendEmail = require("../utils/sendEmail");
 
 class TeamController {
   static createTeam = catchAsync(async (req, res, next) => {
-    const { name, description, department } = req.body;
+    const { name, description, members, leader } = req.body;
 
     let joischema = joi.object({
       name: joi.string().min(3).max(30).required(),
       description: joi.string().min(3).required(),
-      department: joi.string().required(),
+      members: joi.array().items(joi.string()).required(),
+      leader: joi.string().required(),
     });
 
     let { error } = joischema.validate(req.body);
@@ -32,38 +33,9 @@ class TeamController {
     const team = await Team.create({
       name,
       description,
-      department,
+      members,
+      leader,
     });
-
-    return HelperResponse.success(res, "Team created successfully", team);
-  });
-
-  static getTeams = catchAsync(async (req, res, next) => {
-    let teams = await Team.find().lean();
-
-    return HelperResponse.success(res, "Teams fetched successfully", teams);
-  });
-
-  static addMembers = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-
-    const { members } = req.body;
-
-    let joischema = joi.object({
-      members: joi.array().items(joi.string()).required(),
-    });
-
-    let { error } = joischema.validate(req.body);
-
-    if (error) {
-      return next(new CustomErrorHandler(400, error.message));
-    }
-
-    const team = await Team.findById(id);
-
-    if (!team) {
-      return next(new CustomErrorHandler(400, "Team not found"));
-    }
 
     await User.updateMany(
       { _id: { $in: members } },
@@ -75,12 +47,52 @@ class TeamController {
       }
     );
 
-    team.members = members;
-
-    await team.save();
-
-    return HelperResponse.success(res, "Members added successfully", team);
+    return HelperResponse.success(res, "Team created successfully", team);
   });
+
+  static getTeams = catchAsync(async (req, res, next) => {
+    let teams = await Team.find().lean();
+
+    return HelperResponse.success(res, "Teams fetched successfully", teams);
+  });
+
+  // static addMembers = catchAsync(async (req, res, next) => {
+  //   const { id } = req.params;
+
+  //   const { members } = req.body;
+
+  //   let joischema = joi.object({
+  //     members: joi.array().items(joi.string()).required(),
+  //   });
+
+  //   let { error } = joischema.validate(req.body);
+
+  //   if (error) {
+  //     return next(new CustomErrorHandler(400, error.message));
+  //   }
+
+  //   const team = await Team.findById(id);
+
+  //   if (!team) {
+  //     return next(new CustomErrorHandler(400, "Team not found"));
+  //   }
+
+  //   await User.updateMany(
+  //     { _id: { $in: members } },
+  //     {
+  //       $set: {
+  //         assigned_to_team: true,
+  //         current_team: team._id,
+  //       },
+  //     }
+  //   );
+
+  //   team.members = members;
+
+  //   await team.save();
+
+  //   return HelperResponse.success(res, "Members added successfully", team);
+  // });
 
   static disableTeam = catchAsync(async (req, res, next) => {
     const { id } = req.params;
