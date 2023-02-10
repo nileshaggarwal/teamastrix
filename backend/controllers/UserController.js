@@ -163,8 +163,28 @@ class UserController {
   static getEmployeesByDepartment = catchAsync(async (req, res, next) => {
     let { department } = req.params;
 
+    if (department === "all") {
+      let employees = await User.find({
+        $and: [
+          { role: "employee" },
+          {
+            assigned_to_team: false,
+          },
+        ],
+      });
+
+      console.log(employees);
+      return HelperResponse.success(res, "Employees fetched successfully", employees);
+    }
+
     let employees = await User.find({
-      $and: [{ department: department }, { role: "employee" }],
+      $and: [
+        { department: department },
+        { role: "employee" },
+        {
+          assigned_to_team: false,
+        },
+      ],
     });
 
     return HelperResponse.success(res, "Employees fetched successfully", employees);

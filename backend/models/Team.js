@@ -13,9 +13,6 @@ const teamSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  department: {
-    type: String,
-  },
   is_active: {
     type: Boolean,
     default: true,
