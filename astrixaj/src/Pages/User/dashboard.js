@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import AddPersonelOKR from "../../Components/AdminPanel/AddPersonelOKR";
 import Layout from "../../Components/User/layout";
-import ManageMiles from "../../Components/User/ManageMiles";
 
 import ViewOKRS from "../../Components/User/ViewOKRS";
 
@@ -11,6 +11,7 @@ const Dashboard = () => {
     <div>
       <Layout chosenMenu={chosenMenu} setChosenMenu={setChosenMenu}>
         {chosenMenu === "ViewOkr" && <ViewOKRS />}
+        {chosenMenu === "createOKR" && <AddPersonelOKR />}
       </Layout>
     </div>
   );

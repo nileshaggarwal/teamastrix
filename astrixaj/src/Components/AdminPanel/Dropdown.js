@@ -3,11 +3,16 @@ import { Listbox, Transition } from "@headlessui/react";
 import { AiOutlineCheck } from "react-icons/ai";
 import { HiChevronUpDown } from "react-icons/hi2";
 
-const Dropdown = ({ label, list, handleChange, name }) => {
+const Dropdown = ({ label, list, handleChange, name, type, index }) => {
   const [selected, setSelected] = useState(list[0]);
 
   useEffect(() => {
-    handleChange(selected.value, name);
+    if (type === "array") {
+      console.log("arrayvsdghsvdg", index);
+      handleChange(selected, index, "type");
+    } else {
+      handleChange(selected, name);
+    }
   }, [selected]);
 
   return (
@@ -21,7 +26,10 @@ const Dropdown = ({ label, list, handleChange, name }) => {
             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
               <span className="block truncate">{selected.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <HiChevronUpDown className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <HiChevronUpDown
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </span>
             </Listbox.Button>
             <Transition
@@ -44,13 +52,18 @@ const Dropdown = ({ label, list, handleChange, name }) => {
                     {({ selected }) => (
                       <>
                         <span
-                          className={`block truncate ${selected ? "font-medium" : "font-normal"}`}
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
                         >
                           {item.name}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                            <AiOutlineCheck className="h-5 w-5 text-gren-500" aria-hidden="true" />
+                            <AiOutlineCheck
+                              className="h-5 w-5 text-gren-500"
+                              aria-hidden="true"
+                            />
                           </span>
                         ) : null}
                       </>
