@@ -8,10 +8,9 @@ const Dropdown = ({ label, list, handleChange, name, type, index }) => {
 
   useEffect(() => {
     if (type === "array") {
-      console.log("arrayvsdghsvdg", index);
       handleChange(selected, index, "type");
     } else {
-      handleChange(selected, name);
+      handleChange(selected.value, name);
     }
   }, [selected]);
 

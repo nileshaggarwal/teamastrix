@@ -70,7 +70,12 @@ const AddEmployee = () => {
       return;
     }
 
-    let result = await addEmployee(user.name, user.email, user.department, user.designation);
+    let result = await addEmployee(
+      user.name,
+      user.email,
+      user.department,
+      user.designation
+    );
     if (result) {
       setUser({
         name: "",
@@ -115,6 +120,7 @@ const AddEmployee = () => {
             name="designation"
           />
           <Dropdown
+            type={"addemployee"}
             list={departments}
             label={"Choose Department"}
             handleChange={handleValueChange}
