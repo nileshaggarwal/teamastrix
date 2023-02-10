@@ -102,7 +102,7 @@ const Layout = ({ children, chosenMenu, setChosenMenu, createStore, isOpen, isOp
         <div className="w-10/12 px-8 py-10 overflow-y-scroll flex flex-col space-y-4 relative ">
           {children}
           <div className="w-full flex items-center justify-center text-gray-500 bg-white py-2 ">
-            © 2022 | WETARANG | RIGHTS BY MACHAPOINT
+            © 2022 | WETARANG | RIGHTS BY TeamAstrix
           </div>
         </div>
       </div>

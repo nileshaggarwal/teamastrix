@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import SubHeader from "../SubHeader";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
+import { isAuthenticated } from "../../Helpers/auth";
+import { createObjective, createKeyResults } from "../../Helpers/goals";
 
 const AddPersonelOKR = () => {
   const [team, setTeam] = useState({
@@ -29,10 +31,6 @@ const AddPersonelOKR = () => {
       value: "eee",
     },
   ];
-
-  async function handleSubmit() {
-    console.log(team);
-  }
 
   const [numberoffields, setNumberoffields] = useState(1);
 
@@ -81,7 +79,56 @@ const AddPersonelOKR = () => {
       },
     ]);
   }
-  console.log(milestones);
+  console.log(isAuthenticated(), "teams");
+
+  async function onSubmit() {
+    let body = {
+      name: team.name,
+      equal_percentage: false,
+      created_by: "self",
+      created_by_id: isAuthenticated().id,
+      created_for: "self",
+      assigned_team: isAuthenticated().id,
+      target_value: team.targetValue,
+      target_type: team.targetType.name,
+      due_date: team.date,
+    };
+    console.log(body, "body");
+    createObjective(body).then((data, err) => {
+      console.log(data, "data 2");
+
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(data, milestones, "chut");
+        let goal_id = data.data._id;
+
+        milestones.map((milestone) => {
+          let body2 = {
+            target_value: milestone.currentValue,
+            due_date_key: milestone.due_date,
+            milestone: milestone.milestone,
+
+            type: milestone.type.name,
+            linked_to: isAuthenticated().id,
+            created_by_key: "self",
+            created_by_id_key: isAuthenticated().id,
+            created_for_key: "self",
+            assigned_to: isAuthenticated().id,
+          };
+          console.log(body2, "body main");
+          createKeyResults(body2, goal_id).then((data2, err) => {
+            console.log(data2, "data2");
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(data2);
+            }
+          });
+        });
+      }
+    });
+  }
 
   var rows = [];
   for (let index = 0; index < numberoffields; index++) {
@@ -188,7 +235,7 @@ const AddPersonelOKR = () => {
           </button>
           <div className="py-3">{rows}</div>
           <button
-            onClick={handleSubmit}
+            onClick={onSubmit}
             className="w-full border rounded-lg py-2 bg-amber-100 hover:bg-amber-500 hover:text-white text-amber-900"
           >
             Submit
