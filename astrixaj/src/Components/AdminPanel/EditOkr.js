@@ -1,18 +1,22 @@
 import React, { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import Input from "../AdminPanel/Input";
-import Dropdown from "../AdminPanel/Dropdown";
-import { departments } from "../AdminPanel/departments";
-import { Tab } from "@headlessui/react";
-import { IoMdRemoveCircle } from "react-icons/io";
+import { Dialog, Transition, Tab } from "@headlessui/react";
+import Input from "./Input";
+import moment from "moment";
+import Dropdown from "./Dropdown";
+import { departments } from "./departments";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const EditTeamDetails = ({ closeModal, isOpen, team, handleChange }) => {
-  let [categories] = useState(["Team Details", "Team Members"]);
+const EditOkr = ({ closeModal, isOpen, item }) => {
+  let [categories] = useState(["Objectives Details", "Milestones"]);
   const [selectedOption, setSelectedOption] = useState(categories[0]);
+  const [objective, setObjective] = useState(item);
+
+  async function handleValueChange(value, name) {
+    setObjective({ ...objective, [name]: value });
+  }
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -45,7 +49,7 @@ const EditTeamDetails = ({ closeModal, isOpen, team, handleChange }) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Edit Team
+                  Edit OKR
                 </Dialog.Title>
                 <div className="mt-2 height">
                   <Tab.Group>
@@ -69,51 +73,64 @@ const EditTeamDetails = ({ closeModal, isOpen, team, handleChange }) => {
                       ))}
                     </Tab.List>
                   </Tab.Group>
-                  {selectedOption === "Team Details" && (
+                  {selectedOption === "Objectives Details" && (
                     <div className="w-full relative">
                       <Input
-                        label={"Name of Team"}
+                        label={"Objective"}
                         type="text"
-                        value={team.name}
+                        value={item.objective.name}
                         name="name"
-                        handleChange={handleChange}
+                        // handleChange={handleChange}
                       />
-                      <Input
-                        label={"Descripiton of Team"}
-                        type="text"
-                        value={team.description}
-                        name="description"
-                        handleChange={handleChange}
-                      />
-                      <Dropdown
-                        list={departments}
-                        label={"Choose Department"}
-                        name="department"
-                        handleChange={handleChange}
-                      />
-                      <button className="w-full border rounded-lg py-2 bg-amber-100 hover:bg-amber-500 hover:text-white text-amber-900 my-2">
-                        Update
-                      </button>
                     </div>
                   )}
-                  {selectedOption === "Team Members" && (
-                    <div className="flex flex-col w-full">
-                      <Input label={"Add team members"} type="text" />
+                  {selectedOption === "Milestones" && (
+                    <div className="flex flex-col w-full space-y-2">
+                      <Input label={"Add milestone"} type="text" />
+                      <Dropdown
+                        list={departments}
+                        label={"Assign to"}
+                        handleChange={handleValueChange}
+                        name="assigned_to"
+                      />
+                      <input
+                        type="date"
+                        className="px-3 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      />
                       <div className="flex flex-col items-center space-y-1 my-2">
-                        {team.teamMembers.map((member) => {
+                        {item.key_results.map((milestone, index) => {
                           return (
-                            <div className="flex items-center justify-between  rounded-md w-full py-1 border px-2">
-                              <div className="flex flex-col">
-                                <p className="font-medium">{member.name}</p>
-                                <p className="text-sm">{member.role}</p>
+                            <div
+                              key={index}
+                              className="flex items-center justify-between  rounded-md w-full py-1 border px-2"
+                            >
+                              <div className="flex flex-col space-y-1 text-sm">
+                                <span>{milestone.milestone}</span>
+                                <span>{milestone.assigned_to.name}</span>
                               </div>
-                              <IoMdRemoveCircle className="text-xl text-red-200 hover:text-red-500 cursor-pointer" />
+                              <div className="text-sm flex flex-col items-end space-y-1">
+                                <p className="text-green-700">
+                                  Assigned:
+                                  {moment(milestone.assigned_date).format(
+                                    "MMM Do YY"
+                                  )}
+                                </p>
+                                <p className="text-red-700">
+                                  Due:
+                                  {moment(milestone.due_date).format(
+                                    "MMM Do YY"
+                                  )}
+                                </p>
+                              </div>
                             </div>
                           );
                         })}
                       </div>
                     </div>
                   )}
+                  <button className="w-full border rounded-lg py-2 bg-amber-100 hover:bg-amber-500 hover:text-white text-amber-900 my-2">
+                    Update
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -124,4 +141,4 @@ const EditTeamDetails = ({ closeModal, isOpen, team, handleChange }) => {
   );
 };
 
-export default EditTeamDetails;
+export default EditOkr;
