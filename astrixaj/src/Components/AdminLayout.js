@@ -15,14 +15,10 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   return (
     <div className="py-3 px-3 ">
       <button
-        onClick={() =>
-          setChosenMenu ? setChosenMenu(value) : changeLocation(value)
-        }
+        onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
         className={
           "flex text-left items-center justify-between space-x-1 hover:text-blue-500 " +
-          (chosenMenu && value === chosenMenu
-            ? "text-blue-600"
-            : "text-gray-600")
+          (chosenMenu && value === chosenMenu ? "text-blue-600" : "text-gray-600")
         }
       >
         {icon}
@@ -98,7 +94,7 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
             )}
           </Disclosure>
         </div>
-        <div className="w-10/12 px-8 py-10 overflow-y-scroll flex flex-col space-y-4 relative ">
+        <div className="w-10/12 px-8 py-10 overflow-y-scroll flex flex-col  relative ">
           {children}
           <div className="w-full flex items-center justify-center text-gray-500 bg-white py-2 ">
             © 2022 | RIGHTS BY Team Astrix
