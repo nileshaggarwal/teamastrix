@@ -107,17 +107,6 @@ const Layout = ({
               </>
             )}
           </Disclosure>
-
-          <button
-            onClick={createStore}
-            className={`absolute bottom-0 text-center w-2/12 font-bold text-white py-2 ${
-              isOpen ? "bg-black bg-opacity-20 text-gray-200" : " bg-blue-500 "
-            } ${
-              isOpen2 ? "bg-black bg-opacity-20 text-gray-200" : " bg-blue-500 "
-            }`}
-          >
-            Submit
-          </button>
         </div>
         <div className="w-10/12 px-8 py-10 overflow-y-scroll flex flex-col space-y-4 relative ">
           {children}

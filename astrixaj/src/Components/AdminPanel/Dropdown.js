@@ -3,11 +3,16 @@ import { Listbox, Transition } from "@headlessui/react";
 import { AiOutlineCheck } from "react-icons/ai";
 import { HiChevronUpDown } from "react-icons/hi2";
 
-const Dropdown = ({ label, list, handleChange, name }) => {
+const Dropdown = ({ label, list, handleChange, name, type, index }) => {
   const [selected, setSelected] = useState(list[0]);
 
   useEffect(() => {
-    handleChange(selected, name);
+    if (type === "array") {
+      console.log("arrayvsdghsvdg", index);
+      handleChange(selected, index, "type");
+    } else {
+      handleChange(selected, name);
+    }
   }, [selected]);
 
   return (
