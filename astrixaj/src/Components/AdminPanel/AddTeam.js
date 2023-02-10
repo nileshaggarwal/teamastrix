@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createTeam } from "../../Helpers/teams";
 import SubHeader from "../SubHeader";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
@@ -16,38 +17,56 @@ const AddTeam = () => {
 
   const departments = [
     {
-      name: "CSE",
-      value: "cse",
+      name: "Strategy",
+      value: "strategy",
     },
     {
-      name: "ECE",
-      value: "ece",
+      name: "Marketing",
+      value: "marketing",
     },
     {
-      name: "EEE",
-      value: "eee",
+      name: "Finance",
+      value: "finance",
     },
     {
-      name: "MECH",
-      value: "mech",
+      name: "Human Resources",
+      value: "hr",
+    },
+    {
+      name: "Operations",
+      value: "operations",
+    },
+    {
+      name: "Engineering",
+      value: "engineering",
     },
   ];
 
   async function handleSubmit() {
     console.log(team);
+    let result = await createTeam(team.name, team.description, team.department);
+    console.log(result, "result");
+    if (result) {
+      setTeam({
+        name: "",
+        department: "",
+        description: "",
+      });
+    }
   }
 
   return (
     <>
       <SubHeader heading={"Add Team"} />
-      <div className="my-6 w-full rounded-lg border border-gray-200 bg-white px-4 py-3">
+      <div className="mt-6 w-full rounded-lg border border-gray-200 bg-white px-4 py-3 mb-40">
         <div className="flex flex-col w-3/5 space-y-4">
           <Input
             label={"Name of Team"}
             type="text"
             handleChange={handleValueChange}
-            value={team.name}
+            defaultValue={team.name}
             name="name"
+            value={team.name}
           />
           <Input
             label={"Descripiton of Team"}

@@ -35,7 +35,7 @@ class TeamController {
   });
 
   static getTeams = catchAsync(async (req, res, next) => {
-    const teams = await Team.find();
+    let teams = await Team.find().lean();
 
     return HelperResponse.success(res, "Teams fetched successfully", teams);
   });
@@ -103,7 +103,7 @@ class TeamController {
 
     await team.save();
 
-    return HelperResponse.success(res, "Team statuc changed successfully", team);
+    return HelperResponse.success(res, "Team status changed successfully", team);
   });
 
   static getTeam = catchAsync(async (req, res, next) => {

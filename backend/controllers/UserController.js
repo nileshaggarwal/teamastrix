@@ -57,6 +57,7 @@ class UserController {
         id: user._id,
         role: user.role,
         email: user.email,
+        name: user.name,
       },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
@@ -65,8 +66,6 @@ class UserController {
     return HelperResponse.success(res, "User logged in successfully", {
       token,
       user: {
-        id: user._id,
-        email: user.email,
         role: user.role,
       },
     });
