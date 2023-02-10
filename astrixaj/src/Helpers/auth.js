@@ -69,3 +69,21 @@ export const resetPassword = (id, token, password) => {
       toast.error(err.response.data.message);
     });
 };
+
+export const getNotifications = () => {
+  return axios
+    .get(`${API}/user/notifications`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

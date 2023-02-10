@@ -25,11 +25,11 @@ class NotificationController {
   };
 
   static getNotifications = catchAsync(async (req, res, next) => {
-    const { role, _id } = req.user;
+    const { role, id } = req.user;
 
-    console.log(_id, role);
+    console.log(id, role);
 
-    let notifications = await Notifications.find({ receiver: _id })
+    let notifications = await Notifications.find({ receiver: id })
       .populate("sender", "name role")
       .populate("receiver", "name role")
       .sort({ createdAt: -1 });
