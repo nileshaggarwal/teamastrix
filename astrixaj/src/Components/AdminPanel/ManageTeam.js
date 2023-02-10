@@ -18,15 +18,8 @@ const ManageTeam = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y">
-            <tr className="text-center">
-              <td className="flex items-center justify-center py-4">
-                <img
-                  className="w-10 h-10 rounded-md"
-                  alt=""
-                  src="https://upload.wikimedia.org/wikipedia/commons/1/12/Eureka_Logo_Baseline_Vertical_Color_RGB_Medium.png"
-                />
-              </td>
-              <td className="text-sm text-gray-500">DevOps Team</td>
+            <tr className="text-center ">
+              <td className="text-sm py-3 text-gray-500">DevOps Team</td>
               <td className="text-sm text-gray-500">100</td>
               <td className="text-sm text-gray-500">Devops</td>
               <td className="text-sm text-gray-500   ">
@@ -41,15 +34,8 @@ const ManageTeam = () => {
                 </div>
               </td>
             </tr>
-            <tr className="text-center">
-              <td className="flex items-center justify-center py-4">
-                <img
-                  className="w-10 h-10 rounded-md"
-                  alt=""
-                  src="https://cdn.logojoy.com/wp-content/uploads/2018/05/01104813/1268-768x591.png"
-                />
-              </td>
-              <td className="text-sm text-gray-500">MERN Developers</td>
+            <tr className="text-center ">
+              <td className="text-sm py-3 text-gray-500">MERN Developers</td>
               <td className="text-sm text-gray-500">50</td>
               <td className="text-sm text-gray-500">Development</td>
               <td className="text-sm text-gray-500   ">
