@@ -12,7 +12,6 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
     await localStorage.setItem("gotovalue", value);
     window.location.assign("/userdash");
   }
-
   return (
     <div className="py-3 px-3 ">
       <button
@@ -20,8 +19,10 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
           setChosenMenu ? setChosenMenu(value) : changeLocation(value)
         }
         className={
-          "flex text-left items-center justify-between space-x-1 text-gray-600 hover:text-blue-500 " +
-          (value === chosenMenu && "text-blue-600")
+          "flex text-left items-center justify-between space-x-1 hover:text-blue-500 " +
+          (chosenMenu && value === chosenMenu
+            ? "text-blue-600"
+            : "text-gray-600")
         }
       >
         {icon}

@@ -4,7 +4,7 @@ import AddTeam from "../Components/AdminPanel/AddTeam";
 import ManageTeam from "../Components/AdminPanel/ManageTeam";
 
 const AdminPanel = () => {
-  const [chosenMenu, setChosenMenu] = useState("manageTeam");
+  const [chosenMenu, setChosenMenu] = useState("createTeam");
 
   return (
     <AdminLayout chosenMenu={chosenMenu} setChosenMenu={setChosenMenu}>

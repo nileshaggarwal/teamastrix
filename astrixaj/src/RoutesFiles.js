@@ -6,6 +6,7 @@ import Login from "./Pages/Auth/login";
 import ForgotPassword from "./Pages/Auth/ForgotPassword";
 import Dashboard from "./Pages/User/dashboard";
 import ManageMiles from "./Components/User/ManageMiles";
+import ViewTeam from "./Pages/ViewTeam";
 
 const RoutesFiles = () => {
   return (
@@ -17,6 +18,7 @@ const RoutesFiles = () => {
         <Route path="/forgotpassword" exact element={<ForgotPassword />} />
         <Route path="/userdash" exact element={<Dashboard />} />
         <Route path="/milestone/:id" exact element={<ManageMiles />} />
+        <Route path="/team/:teamId" exact element={<ViewTeam />} />
       </Routes>
     </Router>
   );
