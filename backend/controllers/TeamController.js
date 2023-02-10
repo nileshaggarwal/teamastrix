@@ -6,12 +6,19 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
+const {
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  CHANGE_PASSWORD_URL,
+} = require("../config");
 const sendEmail = require("../utils/sendEmail");
+const NotificationController = require("./NotificationController");
 
 class TeamController {
   static createTeam = catchAsync(async (req, res, next) => {
     const { name, description, members, leader } = req.body;
+
+    const { id } = req.user;
 
     let joischema = joi.object({
       name: joi.string().min(3).max(30).required(),
@@ -41,6 +48,24 @@ class TeamController {
           current_team: team._id,
         },
       }
+    );
+
+    for (let i = 0; i < members.length; i++) {
+      await NotificationController.create(
+        id,
+        members[i],
+        "team",
+        `You have been added to ${name} team`,
+        "Check your tasks now"
+      );
+    }
+
+    await NotificationController.create(
+      id,
+      leader,
+      "team",
+      `You have been made leader of ${name} team`,
+      "Assign tasks now!"
     );
 
     return HelperResponse.success(res, "Team created successfully", team);
@@ -115,7 +140,11 @@ class TeamController {
 
     await team.save();
 
-    return HelperResponse.success(res, "Team status changed successfully", team);
+    return HelperResponse.success(
+      res,
+      "Team status changed successfully",
+      team
+    );
   });
 
   static getTeam = catchAsync(async (req, res, next) => {

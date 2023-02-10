@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const NotificationController = require("./NotificationController");
 
 class UserController {
   static register = catchAsync(async (req, res, next) => {
@@ -75,6 +76,8 @@ class UserController {
   static addEmployee = catchAsync(async (req, res, next) => {
     const { name, email, department, designation } = req.body;
 
+    const { id } = req.user;
+
     let joischema = joi.object({
       name: joi.string().min(3).max(30).required(),
       email: joi.string().email().required(),
@@ -123,6 +126,13 @@ class UserController {
     `
     );
 
+    await NotificationController.create(
+      id,
+      user._id,
+      "personal",
+      "Welcome to the " + user.department + " department",
+      "Create Your OKR now!"
+    );
     return HelperResponse.success(res, "Employee added successfully", user);
   });
 

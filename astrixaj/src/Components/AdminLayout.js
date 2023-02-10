@@ -9,6 +9,7 @@ import { GiFlagObjective } from "react-icons/gi";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../Helpers/auth";
+import { HiBellAlert } from "react-icons/hi2";
 
 const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   async function changeLocation(value) {
@@ -18,14 +19,10 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   return (
     <div className="py-3 px-3 space-x-3 ">
       <button
-        onClick={() =>
-          setChosenMenu ? setChosenMenu(value) : changeLocation(value)
-        }
+        onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
         className={
           "flex text-left items-center justify-between space-x-1 hover:text-blue-500 " +
-          (chosenMenu && value === chosenMenu
-            ? "text-blue-600"
-            : "text-gray-600")
+          (chosenMenu && value === chosenMenu ? "text-blue-600" : "text-gray-600")
         }
       >
         {icon}
@@ -63,6 +60,13 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
             setChosenMenu={setChosenMenu}
             value="dashboard"
             option={"Dashboard"}
+          />
+          <Option
+            chosenMenu={chosenMenu}
+            icon={<HiBellAlert className="text-2xl" />}
+            setChosenMenu={setChosenMenu}
+            value="notification"
+            option={"Notifications"}
           />
           <Option
             chosenMenu={chosenMenu}
@@ -140,6 +144,13 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <Disclosure.Panel static className="text-gray-500">
+                    <Option
+                      chosenMenu={chosenMenu}
+                      icon={<BsDashLg className="text-xs ml-4" />}
+                      setChosenMenu={setChosenMenu}
+                      value="createOKR"
+                      option={"Create OKR's"}
+                    />
                     <Option
                       chosenMenu={chosenMenu}
                       icon={<BsDashLg className="text-xs ml-4" />}

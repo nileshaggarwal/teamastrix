@@ -62,15 +62,15 @@ const ManageTeam = () => {
                 return (
                   <>
                     <tr className="text-center ">
-                      <td className="text-sm py-3 text-gray-500">{team.name}</td>
-                      <td className="text-sm  py-3 text-gray-500 w-[200px]">
+                      <td className="text-sm py-3 text-gray-700 font-bold">{team.name}</td>
+                      <td className="text-sm  py-3 text-gray-700 w-[200px] font-semibold">
                         {team.members.length}
                       </td>
                       {/* <td className="text-sm  py-3 text-gray-500">{team.department}</td> */}
                       <td className="text-sm  py-3 text-gray-500   ">
                         <span
-                          className={`border px-3 py-1 rounded-full font-bold w-[100px] ${
-                            team.is_active ? "bg-green-500 text-black" : "bg-red-600 text-white"
+                          className={`border px-3 py-1 rounded-full  w-[100px] ${
+                            team.is_active ? "bg-green-500 text-white" : "bg-red-600 text-white"
                           }`}
                         >
                           {team.is_active ? "Active" : "Inactive"}
