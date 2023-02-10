@@ -51,9 +51,9 @@ const ManageTeam = () => {
             <thead>
               <tr className="text-sm font-thin">
                 <th className="font-normal py-3">Team Name</th>
-                <th className="font-normal py-3">No. of members</th>
+                <th className="font-normal py-3 w-[200px]">No. of members</th>
                 <th className="font-normal py-3">Department</th>
-                <th className="font-normal py-3">Status</th>
+                <th className="font-normal py-3 w-[100px]">Status</th>
                 <th className="font-normal py-3">Actions</th>
               </tr>
             </thead>
@@ -63,11 +63,13 @@ const ManageTeam = () => {
                   <>
                     <tr className="text-center ">
                       <td className="text-sm py-3 text-gray-500">{team.name}</td>
-                      <td className="text-sm  py-3 text-gray-500">{team.members.length}</td>
+                      <td className="text-sm  py-3 text-gray-500 w-[200px]">
+                        {team.members.length}
+                      </td>
                       <td className="text-sm  py-3 text-gray-500">{team.department}</td>
                       <td className="text-sm  py-3 text-gray-500   ">
                         <span
-                          className={`border px-3 py-1 rounded-full font-bold ${
+                          className={`border px-3 py-1 rounded-full font-bold w-[100px] ${
                             team.is_active ? "bg-green-500 text-black" : "bg-red-600 text-white"
                           }`}
                         >
@@ -95,7 +97,6 @@ const ManageTeam = () => {
                         </div>
                       </td>
                     </tr>
-                    ;
                   </>
                 );
               })}

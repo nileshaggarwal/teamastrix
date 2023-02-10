@@ -15,7 +15,7 @@ const RoutesFiles = () => {
         <Route path="/" exact element={<App />} />
         <Route path="/admin" exact element={<AdminPanel />} />
         <Route path="/login" exact element={<Login />} />
-        <Route path="/forgotpassword" exact element={<ForgotPassword />} />
+        <Route path="/forgot-password/:id/:token" exact element={<ForgotPassword />} />
         <Route path="/userdash" exact element={<Dashboard />} />
         <Route path="/milestone/:id" exact element={<ManageMiles />} />
         <Route path="/team/:teamId" exact element={<ViewTeam />} />

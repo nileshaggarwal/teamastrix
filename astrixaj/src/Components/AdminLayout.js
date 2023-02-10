@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Disclosure, Transition } from "@headlessui/react";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
-import { BsDashLg } from "react-icons/bs";
+import { BsDashLg, BsFillPersonPlusFill } from "react-icons/bs";
 import { GoDashboard } from "react-icons/go";
 import { AiOutlineTeam } from "react-icons/ai";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
+
 import Header from "./Header";
 
 const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
@@ -13,7 +14,7 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
     window.location.assign("/userdash");
   }
   return (
-    <div className="py-3 px-3 ">
+    <div className="py-3 px-3 space-x-3 ">
       <button
         onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
         className={
@@ -22,7 +23,7 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
         }
       >
         {icon}
-        <p>{option}</p>
+        <p className="ml-4">{option}</p>
       </button>
     </div>
   );
@@ -55,6 +56,13 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
             setChosenMenu={setChosenMenu}
             value="createTeam"
             option={"Create Team"}
+          />
+          <Option
+            chosenMenu={chosenMenu}
+            icon={<BsFillPersonPlusFill className="text-2xl" />}
+            setChosenMenu={setChosenMenu}
+            value="addEmployee"
+            option={"Add Employee"}
           />
           <label className="ml-3 mt-3 mb-3 font-bold font-mono">Teams</label>
           <Disclosure>
@@ -96,7 +104,7 @@ const AdminLayout = ({ children, chosenMenu, setChosenMenu }) => {
         </div>
         <div className="w-10/12 px-8 py-10 overflow-y-scroll flex flex-col  relative ">
           {children}
-          <div className="w-full flex items-center justify-center text-gray-500 bg-white py-2 ">
+          <div className="w-full flex items-center justify-center text-gray-500 bg-white py-2">
             © 2022 | RIGHTS BY Team Astrix
           </div>
         </div>

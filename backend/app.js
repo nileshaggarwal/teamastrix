@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", appRouter);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 const connectDB = async () => {
   await mongoose.set("strictQuery", true);

@@ -7,6 +7,7 @@ const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto");
 
 class UserController {
   static register = catchAsync(async (req, res, next) => {
@@ -72,12 +73,13 @@ class UserController {
   });
 
   static addEmployee = catchAsync(async (req, res, next) => {
-    const { name, email, department } = req.body;
+    const { name, email, department, designation } = req.body;
 
     let joischema = joi.object({
       name: joi.string().min(3).max(30).required(),
       email: joi.string().email().required(),
       department: joi.string().required(),
+      designation: joi.string().required(),
     });
 
     let { error } = joischema.validate(req.body);
@@ -96,19 +98,28 @@ class UserController {
 
     let hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
+    let token = await crypto.randomBytes(20).toString("hex");
+
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    const forgotPasswordExpire = Date.now() + 10 * 60 * 1000;
+
     let user = await User.create({
       name,
       email,
       password: hashedPassword,
       role: "employee",
       department,
+      designation,
+      forgotPasswordToken: tokenHash,
+      forgotPasswordExpire,
     });
 
     await sendEmail(
       user.email,
-      `Welcome to the ${user.department} department}`,
+      `Welcome to the ${user.department} department`,
       `
-    Click on the link to change your password <a href="${CHANGE_PASSWORD_URL}/${user._id}">Change Password</a> and login
+    Click on the link to change your password <a href="${CHANGE_PASSWORD_URL}/${user._id}/${token}">Change Password</a> and login
     `
     );
 
@@ -118,17 +129,31 @@ class UserController {
   static ResetPassword = catchAsync(async (req, res, next) => {
     const { password } = req.body;
 
+    const { token } = req.params;
+
     const { id } = req.params;
 
-    let user = await User.findById(id);
+    const encrypToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    let user = await User.findOne({
+      $and: [
+        { _id: id },
+        { forgotPasswordToken: encrypToken },
+        { forgotPasswordExpire: { $gt: Date.now() } },
+      ],
+    });
 
     if (!user) {
-      return next(new CustomErrorHandler(400, "Invalid user"));
+      return next(new CustomErrorHandler(400, "Token expired"));
     }
 
     let hashedPassword = await bcrypt.hash(password, 10);
 
+    console.log(password);
+
     user.password = hashedPassword;
+    user.forgotPasswordExpire = undefined;
+    user.forgotPasswordToken = undefined;
 
     await user.save();
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ value, handleChange, type, label, name }) => {
+const Input = ({ value, handleChange, type, label, name, required }) => {
   return (
     <div className="flex flex-col items-start justify-center">
       <label className="ml-3 mt-3 mb-3 font-semibold font-mono">{label}</label>
@@ -9,6 +9,7 @@ const Input = ({ value, handleChange, type, label, name }) => {
         value={value}
         onChange={(e) => handleChange(e.target.value, name)}
         type={type}
+        required={required}
       />
     </div>
   );

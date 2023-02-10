@@ -51,3 +51,21 @@ export const logout = () => {
     return true;
   }
 };
+
+export const resetPassword = (id, token, password) => {
+  return axios
+    .put(`${API}/user/reset-password/${id}/${token}`, {
+      password,
+    })
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+      return res.data.success;
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err.response.data.message);
+    });
+};

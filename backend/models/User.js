@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
   department: {
     type: String,
   },
+  designation: {
+    type: String,
+  },
   assigned_to_team: {
     type: Boolean,
     default: false,
@@ -25,6 +28,12 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team",
     default: null,
+  },
+  forgotPasswordToken: {
+    type: String,
+  },
+  forgotPasswordExpire: {
+    type: Date,
   },
 });
 
