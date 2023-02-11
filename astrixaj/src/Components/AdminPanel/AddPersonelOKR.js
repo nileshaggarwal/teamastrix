@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SubHeader from "../SubHeader";
 import Dropdown from "./Dropdown";
 import Input from "./Input";
 import { isAuthenticated } from "../../Helpers/auth";
 import { createObjective, createKeyResults } from "../../Helpers/goals";
+import { getAllTeams } from "../../Helpers/teams";
 
-const AddPersonelOKR = () => {
-  const [team, setTeam] = useState({
+const AddManagerOKR = () => {
+  const [okr, setOkr] = useState({
     name: "",
     date: "",
     targetType: "",
     targetValue: "",
+    teamSelected: "",
   });
+  const [teams, setTeams] = useState([]);
+
+  async function handleTeams() {
+    let teams = await getAllTeams();
+    console.log(teams, "teams sex");
+    if (!teams) {
+      console.log("error");
+    }
+    setTeams(teams);
+    let newArr = [...milestones];
+    if (teams[0].members.length > 0) {
+      newArr[0].userSelected = teams[0].members;
+      console.log(newArr, "newArr");
+      setMilestones(newArr);
+    }
+  }
+  console.log(teams, "teams main");
+  useEffect(() => {
+    handleTeams();
+  }, []);
 
   async function handleValueChange(value, name) {
-    setTeam({ ...team, [name]: value });
+    setOkr({ ...okr, [name]: value });
   }
 
   const departments = [
@@ -32,6 +54,10 @@ const AddPersonelOKR = () => {
     },
   ];
 
+  async function handleSubmit() {
+    console.log(okr);
+  }
+
   const [numberoffields, setNumberoffields] = useState(1);
 
   const [milestones, setMilestones] = useState([
@@ -41,8 +67,59 @@ const AddPersonelOKR = () => {
       currentValue: "",
       targetValue: "",
       due_date: "",
+      userSelected: "",
     },
   ]);
+
+  console.log(milestones, "milestones sex");
+  async function onSubmit() {
+    let body = {
+      name: okr.name,
+      equal_percentage: false,
+      created_by: "manager",
+      created_by_id: isAuthenticated().id,
+      created_for: "team",
+      assigned_team: okr.teamSelected._id,
+      target_value: okr.targetValue,
+      target_type: okr.targetType.name,
+      due_date: okr.date,
+    };
+    console.log(body, "body");
+    createObjective(body).then((data, err) => {
+      console.log(data, "data 2");
+
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(data, milestones, "chut");
+        let goal_id = data.data._id;
+
+        for (let i = 0; i < milestones.length; i++) {
+          console.log(milestones[i], "milestones[i]");
+          let body2 = {
+            target_value: milestones[i].currentValue,
+            due_date_key: milestones[i].due_date,
+            milestone: milestones[i].milestone,
+            assigned_to_teams: [okr.teamSelected._id],
+
+            created_by_key: "manager",
+            created_by_id_key: isAuthenticated().id,
+            created_for_key: "member",
+            assigned_to: milestones[i].userSelected,
+          };
+          console.log(body2, "body main onSUbmit");
+          createKeyResults(body2, goal_id).then((data2, err) => {
+            console.log(data2, "data2");
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(data2);
+            }
+          });
+        }
+      }
+    });
+  }
 
   function removeCustomBody(id) {
     var newArr = [...milestones];
@@ -79,56 +156,7 @@ const AddPersonelOKR = () => {
       },
     ]);
   }
-  console.log(isAuthenticated(), "teams");
-
-  async function onSubmit() {
-    let body = {
-      name: team.name,
-      equal_percentage: false,
-      created_by: "self",
-      created_by_id: isAuthenticated().id,
-      created_for: "self",
-      assigned_team: isAuthenticated().id,
-      target_value: team.targetValue,
-      target_type: team.targetType.name,
-      due_date: team.date,
-    };
-    console.log(body, "body");
-    createObjective(body).then((data, err) => {
-      console.log(data, "data 2");
-
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(data, milestones, "chut");
-        let goal_id = data.data._id;
-
-        milestones.map((milestone) => {
-          let body2 = {
-            target_value: milestone.currentValue,
-            due_date_key: milestone.due_date,
-            milestone: milestone.milestone,
-
-            type: milestone.type.name,
-            linked_to: isAuthenticated().id,
-            created_by_key: "self",
-            created_by_id_key: isAuthenticated().id,
-            created_for_key: "self",
-            assigned_to: isAuthenticated().id,
-          };
-          console.log(body2, "body main");
-          createKeyResults(body2, goal_id).then((data2, err) => {
-            console.log(data2, "data2");
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(data2);
-            }
-          });
-        });
-      }
-    });
-  }
+  console.log(okr.teamSelected.members, "teamSelected");
 
   var rows = [];
   for (let index = 0; index < numberoffields; index++) {
@@ -142,6 +170,7 @@ const AddPersonelOKR = () => {
             </button>
           )}
         </div>
+
         <input
           type="text"
           onChange={(e) =>
@@ -159,6 +188,18 @@ const AddPersonelOKR = () => {
           name="targetType"
           type="array"
         />
+        {okr?.teamSelected?.members?.length > 0 && (
+          <div className="py-3">
+            <Dropdown
+              list={teams && okr.teamSelected.members}
+              label={"Choose a EMployee"}
+              handleChange={handleMilestonerData}
+              index={index}
+              type="arraydiff"
+              name="userSelected"
+            />
+          </div>
+        )}
 
         <div className="ml-3 mt-3 mb-3 font-semibold font-mono">
           CurrentValue
@@ -194,24 +235,38 @@ const AddPersonelOKR = () => {
       </div>
     );
   }
+  console.log(teams, "teams");
 
   return (
     <>
-      <SubHeader heading={"Add Personel OKR"} />
+      <SubHeader
+        heading={"Add Manager OKR"}
+        classname="text-blue-600 font-bold text-xl"
+      />
       <div className="my-6 w-full rounded-lg border border-gray-200 bg-white px-4 py-3">
         <div className="flex flex-col w-3/5 space-y-4">
           <Input
             label={"Key Objective"}
             type="text"
             handleChange={handleValueChange}
-            value={team.name}
+            value={okr.name}
             name="name"
           />
+          {teams && teams.length > 0 && (
+            <Dropdown
+              list={teams && teams}
+              label={"Choose a Team"}
+              handleChange={handleValueChange}
+              name="teamSelected"
+              value={okr.teamSelected}
+            />
+          )}
+
           <Input
             label={"Due Date"}
             type="date"
             handleChange={handleValueChange}
-            value={team.date}
+            value={okr.date}
             name="date"
           />
           <Dropdown
@@ -219,20 +274,16 @@ const AddPersonelOKR = () => {
             label={"Choose Target Type"}
             handleChange={handleValueChange}
             name="targetType"
+            value={okr.targetType}
           />
           <Input
-            label={"Taget"}
+            label={"Target Value"}
             type="percentage"
             handleChange={handleValueChange}
-            value={team.targetValue}
+            value={okr.targetValue}
             name="targetValue"
           />
-          <button
-            onClick={incereasenumber}
-            className="w-[30%] border rounded-md py-2 bg-amber-300 hover:bg-amber-500 hover:text-white text-amber-900"
-          >
-            Add Milestone +
-          </button>
+
           <div className="py-3">{rows}</div>
           <button
             onClick={onSubmit}
@@ -240,10 +291,16 @@ const AddPersonelOKR = () => {
           >
             Submit
           </button>
+          <button
+            onClick={incereasenumber}
+            className="w-[30%] border rounded-md py-2 bg-amber-300 hover:bg-amber-500 hover:text-white text-amber-900"
+          >
+            Add Milestone +
+          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default AddPersonelOKR;
+export default AddManagerOKR;

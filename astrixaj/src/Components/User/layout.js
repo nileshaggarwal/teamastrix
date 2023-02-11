@@ -6,6 +6,7 @@ import { BsDashLg } from "react-icons/bs";
 import { MdVpnKey } from "react-icons/md";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import Header from "../Header";
+import { GoMilestone } from "react-icons/go";
 
 const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   console.log(chosenMenu, "chosenmeny", value);
@@ -106,10 +107,24 @@ const Layout = ({
                     />
                     <Option
                       chosenMenu={chosenMenu}
+                      icon={<GoMilestone className="text-xs ml-4" />}
+                      setChosenMenu={setChosenMenu}
+                      value="createSubMilestone"
+                      option={"Create Sub Milestone"}
+                    />
+                    <Option
+                      chosenMenu={chosenMenu}
                       icon={<MdVpnKey className="text-xs ml-4" />}
                       setChosenMenu={setChosenMenu}
                       value="OKR"
                       option={"View OKR's"}
+                    />
+                    <Option
+                      chosenMenu={chosenMenu}
+                      icon={<MdVpnKey className="text-xs ml-4" />}
+                      setChosenMenu={setChosenMenu}
+                      value="TeamOKR"
+                      option={"Team OKR's"}
                     />
                   </Disclosure.Panel>
                 </Transition>
