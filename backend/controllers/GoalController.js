@@ -233,8 +233,7 @@ class GoalController {
   });
 
   static getOkrbyTeam = catchAsync(async (req, res, next) => {
-    const { id } = req.user;
-    req.params;
+    const { id } = req.params;
 
     const keyresults = await KeyResult.find({ assigned_to_teams: id })
       .populate("assigned_to", "name designation")
