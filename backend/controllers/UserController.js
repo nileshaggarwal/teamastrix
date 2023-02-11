@@ -5,7 +5,11 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
+const {
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  CHANGE_PASSWORD_URL,
+} = require("../config");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const NotificationController = require("./NotificationController");
@@ -184,7 +188,11 @@ class UserController {
       });
 
       console.log(employees);
-      return HelperResponse.success(res, "Employees fetched successfully", employees);
+      return HelperResponse.success(
+        res,
+        "Employees fetched successfully",
+        employees
+      );
     }
 
     let employees = await User.find({
@@ -197,7 +205,11 @@ class UserController {
       ],
     });
 
-    return HelperResponse.success(res, "Employees fetched successfully", employees);
+    return HelperResponse.success(
+      res,
+      "Employees fetched successfully",
+      employees
+    );
   });
 }
 

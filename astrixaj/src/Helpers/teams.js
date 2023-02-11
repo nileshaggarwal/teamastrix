@@ -99,6 +99,20 @@ export const getTeam = (id) => {
     });
 };
 
+export const getAllTeams = () => {
+  return axios
+    .get(`${API}/team/get-All`)
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
+
 export const assignLeader = (id, leader) => {
   return axios
     .post(`${API}/team/assign-leader/${id}/${leader}`, {

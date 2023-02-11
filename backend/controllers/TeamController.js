@@ -154,6 +154,16 @@ class TeamController {
     return HelperResponse.success(res, "Team fetched successfully", team);
   });
 
+  static getAllTeams = catchAsync(async (req, res, next) => {
+    const team = await Team.find({}).populate("members", "name email");
+
+    if (!team) {
+      return next(new CustomErrorHandler(400, "Team not found"));
+    }
+
+    return HelperResponse.success(res, "Team fetched successfully", team);
+  });
+
   static assignLeader = catchAsync(async (req, res, next) => {
     const { id, leader_id } = req.params;
 
