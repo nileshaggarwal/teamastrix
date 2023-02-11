@@ -1,12 +1,30 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { AiFillCloseCircle, AiFillEye } from "react-icons/ai";
 import SubHeader from "../SubHeader";
 import Layout from "./layout";
 import { Dialog, Transition } from "@headlessui/react";
+import { getOkrsByUserId } from "../../Helpers/goals";
 
 const ManageMiles = () => {
   let [isOpen, setIsOpen] = useState(false);
   const [menu, setMenu] = useState("update");
+
+  const [okrs, setOkrs] = useState([]);
+  const [selectedOkr, setSelectedOkr] = useState();
+
+  async function getOkrs() {
+    let okrs = await getOkrsByUserId();
+    if (!okrs) {
+      console.log("error so no okrs");
+    }
+    setOkrs(okrs);
+  }
+
+  useEffect(() => {
+    getOkrs();
+  }, []);
+
+  console.log(okrs, "okrs");
 
   function closeModal() {
     setIsOpen(false);
@@ -16,43 +34,9 @@ const ManageMiles = () => {
     setIsOpen(true);
   }
 
-  return (
-    <div>
-      <Layout>
-        <SubHeader heading={"Manage MilesStones"} />
-        <div className="my-6 w-full rounded-md border border-gray-200">
-          <table className="table-auto  w-full  bg-[#f7f8f9] rounded-lg">
-            <thead>
-              <tr className="text-sm font-thin">
-                <th className="font-normal py-3">Milestone</th>
-                <th className="font-normal py-3">Team Assigned</th>
-                <th className="font-normal py-3">Completion Level</th>
-                <th className="font-normal py-3">Due Date</th>
-                <th className="font-normal py-3">Edit</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y">
-              <tr className="text-center">
-                <td className="flex items-center justify-center py-4">
-                  sdhbshdbsbdh
-                </td>
-                <td className="text-sm text-gray-500">DevOps Team</td>
-                <td className="text-sm text-gray-500">percentage</td>
-                <td className="text-sm text-gray-500">12/3/232</td>
-
-                <td>
-                  <div className="flex items-center space-x-1 justify-center">
-                    <AiFillEye
-                      className="text-2xl text-gray-500 hover:text-gray-700 cursor-pointer"
-                      onClick={openModal}
-                    />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Layout>
+  console.log(selectedOkr, "selectedOkr");
+  const transitionComponent = () => {
+    return (
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10 " onClose={closeModal}>
           <Transition.Child
@@ -80,27 +64,27 @@ const ManageMiles = () => {
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white py-6 text-left align-middle shadow-xl transition-all">
                   <div className="h-[30rem]">
-                    <div className="px-3 bg-gray-100 pb-6">
+                    <div className="px-3 bg-gray-100 pb-6 h-[40%]">
                       <div className=" flex items-center border-b-[1px] ">
                         <div className="text-sm font-[600]">Milestone:</div>
                         <div className="text-sm font-[500] pl-3">
-                          sdhshdbdsdsdsd
+                          {selectedOkr?.milestone}
                         </div>
                       </div>
                       <div className=" flex items-center border-b-[1px]">
                         <div className="text-sm font-[600]">Team Assigned:</div>
                         <div className="text-sm font-[500] pl-3">
-                          Devops Team
+                          {selectedOkr?.assigned_to_teams?.name}
                         </div>
                       </div>
                       <div className=" flex items-center border-b-[1px]">
                         <div className="text-sm font-[600]">User Assigned:</div>
-                        <div className="text-sm font-[500] pl-3">Mr Ramju </div>
+                        <div className="text-sm font-[500] pl-3">YourSelf </div>
                       </div>
                       <div className=" flex items-center border-b-[3px]">
                         <div className="text-sm font-[600]">Due Date:</div>
                         <div className="text-sm font-[500] pl-3">
-                          22/09/0202{" "}
+                          {selectedOkr?.due_date_key.substring(0, 10)}
                         </div>
                       </div>
                     </div>
@@ -193,6 +177,60 @@ const ManageMiles = () => {
           </div>
         </Dialog>
       </Transition>
+    );
+  };
+
+  return (
+    <div>
+      <SubHeader heading={"Manage MilesStones"} />
+      <div className="my-6 w-full rounded-md border border-gray-200">
+        <table className="table-auto  w-full  bg-[#f7f8f9] rounded-lg">
+          <thead>
+            <tr className="text-sm font-thin">
+              <th className="font-normal py-3">Milestone</th>
+              <th className="font-normal py-3">Team Assigned</th>
+              <th className="font-normal py-3">Completion Level</th>
+              <th className="font-normal py-3">Due Date</th>
+              <th className="font-normal py-3">Edit</th>
+            </tr>
+          </thead>
+
+          <tbody className="bg-white divide-y">
+            {okrs &&
+              okrs.map((okr) => {
+                return (
+                  <tr className="text-center">
+                    <td className="flex items-center justify-center py-4">
+                      {okr?.milestone}
+                    </td>
+                    <td className="text-sm text-gray-500">
+                      {okr?.assigned_to_teams?.name}
+                    </td>
+                    <td className="text-sm text-gray-500">
+                      {okr?.value / okr?.target_value}
+                    </td>
+                    <td className="text-sm text-gray-500">
+                      {okr?.due_date_key.substring(0, 10)}
+                    </td>
+
+                    <td>
+                      <div className="flex items-center space-x-1 justify-center">
+                        <AiFillEye
+                          className="text-2xl text-gray-500 hover:text-gray-700 cursor-pointer"
+                          onClick={() => {
+                            setSelectedOkr(okr);
+                            openModal();
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+        {transitionComponent()}
+      </div>
     </div>
   );
 };

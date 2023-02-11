@@ -87,7 +87,7 @@ const Layout = ({
                       chosenMenu={chosenMenu}
                       icon={<BsDashLg className="text-xs ml-4" />}
                       setChosenMenu={setChosenMenu}
-                      value="ViewOkr"
+                      value="ManageMiles"
                       option={"Manage Okrs"}
                     />
                     <Option

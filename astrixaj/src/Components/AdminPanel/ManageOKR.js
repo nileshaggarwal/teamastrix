@@ -205,7 +205,7 @@ const ManageOKR = () => {
                                   <div className="flex items-center divide-x divide-x-200">
                                     <div className="flex flex-col items-center px-1">
                                       <span>Assigned To</span>
-                                      <span>{milestone.assigned_to.name}</span>
+                                      <span>{milestone.assigned_to}</span>
                                     </div>
                                     <div className="flex flex-col items-center space-y-2 px-1">
                                       <p className="text-green-700">
