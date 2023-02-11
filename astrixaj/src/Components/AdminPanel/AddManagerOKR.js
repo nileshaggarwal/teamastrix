@@ -13,6 +13,7 @@ const AddManagerOKR = () => {
     targetType: "",
     targetValue: "",
     teamSelected: "",
+    currentValue: "",
   });
   const [teams, setTeams] = useState([]);
 
@@ -82,6 +83,7 @@ const AddManagerOKR = () => {
       target_value: okr.targetValue,
       target_type: okr.targetType.name,
       due_date: okr.date,
+      value: okr.currentValue,
     };
     console.log(body, "body");
     createObjective(body).then((data, err) => {
@@ -96,11 +98,11 @@ const AddManagerOKR = () => {
         for (let i = 0; i < milestones.length; i++) {
           console.log(milestones[i], "milestones[i]");
           let body2 = {
-            target_value: milestones[i].currentValue,
+            target_value: milestones[i].targetValue,
             due_date_key: milestones[i].due_date,
             milestone: milestones[i].milestone,
             assigned_to_teams: [okr.teamSelected._id],
-
+            value: milestones[i].currentValue,
             created_by_key: "manager",
             created_by_id_key: isAuthenticated().id,
             created_for_key: "member",
@@ -274,6 +276,13 @@ const AddManagerOKR = () => {
             handleChange={handleValueChange}
             name="targetType"
             value={okr.targetType}
+          />
+          <Input
+            label={"Current Value"}
+            type="percentage"
+            handleChange={handleValueChange}
+            value={okr.currentValue}
+            name="currentValue"
           />
           <Input
             label={"Target Value"}

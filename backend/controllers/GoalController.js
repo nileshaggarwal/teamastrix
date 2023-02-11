@@ -7,7 +7,11 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
+const {
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  CHANGE_PASSWORD_URL,
+} = require("../config");
 const sendEmail = require("../utils/sendEmail");
 
 class GoalController {
@@ -19,7 +23,7 @@ class GoalController {
       equal_percentage,
       created_by,
       created_by_id,
-
+      value,
       linked_to,
       target_type,
       target_value,
@@ -35,8 +39,12 @@ class GoalController {
       created_by: joi.string().allow("manager", "teamLead", "self"),
       linked_to: joi.string(),
       target_value: joi.number(),
-      target_type: joi.string().allow("percentage", "number", "currency").required(),
+      target_type: joi
+        .string()
+        .allow("percentage", "number", "currency")
+        .required(),
       due_date: joi.date(),
+      value: joi.number(),
     });
     console.log(req.body, "body 2");
 
@@ -63,6 +71,7 @@ class GoalController {
         target_type,
         target_value,
         due_date,
+        value,
       },
     });
 
@@ -135,7 +144,11 @@ class GoalController {
       return next(new CustomErrorHandler(400, "Goal not found"));
     }
     console.log(goal, "goal");
-    return HelperResponse.success(res, "Key results added successfully", key_results);
+    return HelperResponse.success(
+      res,
+      "Key results added successfully",
+      key_results
+    );
   });
 
   static getGoals = catchAsync(async (req, res, next) => {
@@ -203,7 +216,11 @@ class GoalController {
       .populate("assigned_to_teams", "name")
       .lean();
 
-    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
+    return HelperResponse.success(
+      res,
+      "Key results fetched successfully",
+      keyresults
+    );
   });
 
   static getOkrbyTeam = catchAsync(async (req, res, next) => {
@@ -215,7 +232,11 @@ class GoalController {
       .populate("assigned_to_teams", "name")
       .lean();
 
-    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
+    return HelperResponse.success(
+      res,
+      "Key results fetched successfully",
+      keyresults
+    );
   });
 }
 

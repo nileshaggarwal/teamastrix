@@ -140,9 +140,9 @@ const ManageOKR = () => {
                       )}
                       <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-800 bg-white flex flex-col rounded-md">
                         <div className="flex flex-col space-y-2 w-full pr-40 pl-20">
-                          {goals?.key_results?.length > 0 &&
-                            goals?.key_results?.map((milestone, inde) => {
-                              console.log(milestone, "milestone");
+                          {objective?.key_results?.length > 0 &&
+                            objective?.key_results?.map((milestone, inde) => {
+                              console.log(milestone, "milestone puss");
                               return (
                                 <div
                                   className={

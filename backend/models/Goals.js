@@ -74,6 +74,10 @@ const goalSchema = new mongoose.Schema({
       type: String,
       enum: ["percentage", "number", "currency"],
     },
+    value: {
+      type: Number,
+      default: 0,
+    },
 
     due_date: Date,
   },
