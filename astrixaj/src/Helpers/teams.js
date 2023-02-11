@@ -112,6 +112,19 @@ export const getAllTeams = () => {
     });
 };
 
+export const generateHeatMap = () => {
+  return axios
+    .get(`${API}/team/generate`)
+    .then((res) => {
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
+
 export const assignLeader = (id, leader) => {
   return axios
     .post(`${API}/team/assign-leader/${id}/${leader}`, {
