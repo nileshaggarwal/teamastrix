@@ -243,6 +243,42 @@ class GoalController {
 
     return HelperResponse.success(res, "Key results fetched successfully", keyresults);
   });
+
+  static addMileStoneunderMileStone = catchAsync(async (req, res, next) => {
+    const {
+      milestone,
+      assigned_to,
+      assigned_to_teams,
+      due_date_key,
+      type,
+      value,
+      target_value,
+      created_by_key,
+      created_by_id_key,
+      created_for_key,
+    } = req.body;
+
+    let key = await KeyResult.findById(req.params.id);
+    if (!key) {
+      return next(new CustomErrorHandler(400, "Key not found"));
+    }
+
+    let data = await KeyResult.create({
+      milestone,
+      assigned_to,
+      assigned_to_teams,
+      due_date_key,
+      type,
+      value,
+      target_value,
+      linked_to: key._id,
+      created_by_key,
+      created_by_id_key,
+      created_for_key,
+    });
+
+    return HelperResponse.success(res, "Milestone added successfully", data);
+  });
 }
 
 module.exports = GoalController;

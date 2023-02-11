@@ -17,3 +17,5 @@ router.get("/key-results/team/:id", isAuthenticated, GoalController.getOkrbyTeam
 
 router.put("/update-progress/:id", isAuthenticated, GoalController.updateProgress);
 module.exports = router;
+
+router.put("/update-milestone/:id", isAuthenticated, GoalController.addMileStoneunderMileStone);
