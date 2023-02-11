@@ -162,6 +162,35 @@ class GoalController {
 
     return HelperResponse.success(res, "Goals fetched successfully", goals);
   });
+
+  static updateProgress = catchAsync(async (req, res, next) => {
+    let key = await KeyResult.findById(req.params.id);
+    if (!key) {
+      return next(new CustomErrorHandler(400, "Key not found"));
+    }
+    key.value = req.body.value;
+    await key.save();
+    if (key.linked_to !== null) {
+      let keygoal = await KeyResult.findById(key.linked_to);
+      let keys = await KeyResult.find({ linked_to: key.linked_to });
+      let total = 0;
+
+      keys.forEach((key) => {
+        total = total + parseInt(key.value);
+      });
+      if (key.type === "percentage") {
+        keygoal.value = total / keys.length;
+      } else {
+        keygoal.value = total;
+      }
+      await keygoal.save();
+      let goal = await Goal.find({
+        $elemMatch: {
+          key_results: keygoal._id,
+        },
+      });
+    }
+  });
 }
 
 module.exports = GoalController;
