@@ -18,7 +18,6 @@ const AddManagerOKR = () => {
 
   async function handleTeams() {
     let teams = await getAllTeams();
-    console.log(teams, "teams sex");
     if (!teams) {
       console.log("error");
     }

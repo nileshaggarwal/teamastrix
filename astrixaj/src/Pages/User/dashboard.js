@@ -3,7 +3,7 @@ import AddPersonelOKR from "../../Components/AdminPanel/AddPersonelOKR";
 import NotificationView from "../../Components/AdminPanel/NotificationView";
 import Layout from "../../Components/User/layout";
 
-import ViewOKRS from "../../Components/User/ViewOKRS";
+import ViewOKRS from "../../Components/User/ViewOKRs";
 
 const Dashboard = () => {
   const [chosenMenu, setChosenMenu] = useState("StoreForm");
@@ -11,9 +11,9 @@ const Dashboard = () => {
   return (
     <div>
       <Layout chosenMenu={chosenMenu} setChosenMenu={setChosenMenu}>
-        {chosenMenu === "ViewOkr" && <ViewOKRS />}
         {chosenMenu === "createOKR" && <AddPersonelOKR />}
         {chosenMenu === "notifications" && <NotificationView />}
+        {chosenMenu === "OKR" && <ViewOKRS />}
       </Layout>
     </div>
   );
