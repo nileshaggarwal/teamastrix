@@ -233,7 +233,7 @@ class GoalController {
   });
 
   static getOkrbyTeam = catchAsync(async (req, res, next) => {
-    const { id } = req.user;
+    const { id } = req.params;
     req.params;
 
     const keyresults = await KeyResult.find({ assigned_to_teams: id })

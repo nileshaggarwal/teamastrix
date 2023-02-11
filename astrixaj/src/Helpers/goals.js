@@ -89,6 +89,19 @@ export const updateOkrProgress = (id, value) => {
         toast.success(res.data.message);
       }
       return res.data;
+    });
+};
+export const getOkrsByTeamId = (id) => {
+  return axios
+    .get(`${API}/goal/key-results/team/${id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    })
+    .then((res) => {
+      if (res.data.success) {
+        return res.data.data;
+      }
     })
     .catch((err) => {
       toast.error(err.response.data.message);

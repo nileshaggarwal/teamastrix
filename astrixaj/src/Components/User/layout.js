@@ -20,8 +20,8 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
       <button
         onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
         className={
-          "flex items-center justify-start space-x-1 text-gray-600 hover:text-blue-500 " +
-          (value === chosenMenu && "text-blue-600")
+          "flex items-center justify-start space-x-1  hover:text-blue-500 " +
+          (value === chosenMenu ? "text-blue-600" : "text-gray-600")
         }
       >
         {icon}

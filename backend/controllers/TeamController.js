@@ -231,7 +231,7 @@ class TeamController {
   static getTeamByLeader = catchAsync(async (req, res, next) => {
     const { id } = req.params;
 
-    let team = await Team.findOne({ leader: id }).lean();
+    let team = await Team.findOne({ leader: id }).populate("members").lean();
 
     if (!team) {
       return next(new CustomErrorHandler(400, "Team not found"));
