@@ -53,7 +53,7 @@ const MainPage = () => {
               key={item.id}
               className={`w-[200px] h-[200px] ${color(
                 random
-              )} flex items-center justify-center text-lg`}
+              )} flex items-center justify-center text-lg rounded-md`}
             >
               <p>{item.name}</p>
             </div>

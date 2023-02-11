@@ -17,8 +17,11 @@ const keySchema = new mongoose.Schema({
     type: String,
     enum: ["percentage", "number", "currency"],
   },
-  value: String,
-  target_value: String,
+  value: {
+    type: Number,
+    default: 0,
+  },
+  target_value: Number,
   linked_to: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "KeyResult",
@@ -66,7 +69,7 @@ const goalSchema = new mongoose.Schema({
       ref: "Goal",
       default: null,
     },
-    target_value: String,
+    target_value: Number,
     target_type: {
       type: String,
       enum: ["percentage", "number", "currency"],
