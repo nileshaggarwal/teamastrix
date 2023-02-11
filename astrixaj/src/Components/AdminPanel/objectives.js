@@ -16,6 +16,7 @@ export const Objectives = [
     },
     key_results: [
       {
+        _id: "123456789",
         milestone: "To develop a login page",
         assigned_to: {
           name: "siddharth",
@@ -29,6 +30,7 @@ export const Objectives = [
         assigned_date: "2021-10-02",
       },
       {
+        _id: "123456689",
         milestone: "To develop a register page",
         assigned_to: {
           name: "raghav",
@@ -41,6 +43,7 @@ export const Objectives = [
         assigned_date: "2021-10-02",
       },
       {
+        _id: "123456793",
         milestone: "To develop a home page",
         assigned_to: {
           name: "malika",
@@ -71,6 +74,7 @@ export const Objectives = [
     },
     key_results: [
       {
+        _id: "123446789",
         milestone: "To develop a login page",
         assigned_to: {
           name: "siddharth",
@@ -83,6 +87,7 @@ export const Objectives = [
         assigned_date: "2021-10-02",
       },
       {
+        _id: "123454589",
         milestone: "To develop a register page",
         assigned_to: {
           name: "raghav",
@@ -95,5 +100,47 @@ export const Objectives = [
         assigned_date: "2021-10-02",
       },
     ],
+  },
+];
+
+export const linkedKeyResults = [
+  {
+    linked_to: "123454589",
+    milestone: "To develop a register component",
+    assigned_to: {
+      name: "raghav",
+    },
+    assigned_team: "",
+    type: "currency",
+    value: "150",
+    target_value: "275",
+    due_date: 2021 - 10 - 10,
+    assigned_date: "2021-10-02",
+  },
+  {
+    linked_to: "123454589",
+    milestone: "To develop a register component",
+    assigned_to: {
+      name: "raghav",
+    },
+    assigned_team: "",
+    type: "currency",
+    value: "150",
+    target_value: "275",
+    due_date: 2021 - 10 - 10,
+    assigned_date: "2021-10-02",
+  },
+  {
+    linked_to: "123446789",
+    milestone: "To develop a login page",
+    assigned_to: {
+      name: "siddharth",
+    },
+    assigned_team: "",
+    type: "currency",
+    value: "250",
+    target_value: "275",
+    due_date: 2021 - 10 - 10,
+    assigned_date: "2021-10-02",
   },
 ];

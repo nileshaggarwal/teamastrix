@@ -145,6 +145,20 @@ export const getTeamById = (id) => {
     });
 };
 
+export const getTeamByLeaderId = (id) => {
+  return axios
+    .get(`${API}/team/get/leader/${id}`)
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
+
 export const updateTeam = (id, name, description, members) => {
   return axios
     .put(
