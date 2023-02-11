@@ -7,7 +7,7 @@ import SubHeader from "../SubHeader";
 import { AiOutlineCheck } from "react-icons/ai";
 import { Listbox, Transition } from "@headlessui/react";
 import { HiChevronUpDown } from "react-icons/hi2";
-import { getOkrsByTeamId } from "../../Helpers/goals";
+import { createSubmileStone, getOkrsByTeamId } from "../../Helpers/goals";
 
 const CreateSubMilestone = () => {
   const [milestone, setMilestone] = useState({
@@ -23,9 +23,7 @@ const CreateSubMilestone = () => {
 
   const [team, setTeam] = useState([]);
   const [milestonees, setMilestonees] = useState([]);
-  const [selected, setSelected] = useState(
-    milestonees && milestonees.length > 0 && milestonees[0]
-  );
+  const [selected, setSelected] = useState(milestonees && milestonees.length > 0 && milestonees[0]);
 
   async function handleValueChange(value, name) {
     setMilestone({ ...milestone, [name]: value });
@@ -63,6 +61,24 @@ const CreateSubMilestone = () => {
       value: "currency",
     },
   ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(milestone);
+    let res = await createSubmileStone(
+      {
+        milestone: milestone.milestone,
+        assigned_to: milestone.assigned_to._id,
+        due_date_key: milestone.due_date_key,
+        type: milestone.type.value,
+        assigned_to_teams: null,
+        value: 0,
+        target_value: milestone.target_value,
+      },
+      selected._id
+    );
+    console.log(res);
+  };
 
   return (
     <>
@@ -110,15 +126,9 @@ const CreateSubMilestone = () => {
                 <Listbox value={selected} onChange={setSelected}>
                   <div className="relative mt-1">
                     <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                      <span className="block truncate">
-                        {" "}
-                        {selected.milestone}
-                      </span>
+                      <span className="block truncate"> {selected.milestone}</span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <HiChevronUpDown
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
+                        <HiChevronUpDown className="h-5 w-5 text-gray-400" aria-hidden="true" />
                       </span>
                     </Listbox.Button>
                     <Transition
@@ -136,9 +146,7 @@ const CreateSubMilestone = () => {
                             key={index}
                             className={({ active }) =>
                               `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active
-                                  ? "bg-amber-100 text-amber-900"
-                                  : "text-gray-900"
+                                active ? "bg-amber-100 text-amber-900" : "text-gray-900"
                               }`
                             }
                             value={item}
@@ -179,6 +187,12 @@ const CreateSubMilestone = () => {
             name="target_value"
           />
         </div>
+        <button
+          onClick={handleSubmit}
+          className="w-[400px] m-auto my-4 border rounded-lg py-2 bg-amber-100 hover:bg-amber-500 hover:text-white text-amber-900"
+        >
+          Submit
+        </button>
       </div>
     </>
   );

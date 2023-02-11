@@ -107,3 +107,22 @@ export const getOkrsByTeamId = (id) => {
       toast.error(err.response.data.message);
     });
 };
+
+export const createSubmileStone = (data, id) => {
+  return axios
+    .put(`${API}/goal/update-milestone/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+      return res.data;
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
