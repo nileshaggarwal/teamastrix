@@ -10,7 +10,16 @@ router.get("/getAll", GoalController.getGoals);
 
 router.post("/add-comment", isAuthenticated, CommentController.addComment);
 router.get("/get/:milestone", CommentController.getAllComments);
+router.get("/getAi/ai", CommentController.getAiRecommendations);
 
-router.get("/key-results/user", isAuthenticated, GoalController.getOkrsByUserId);
-router.get("/key-results/team/:id", isAuthenticated, GoalController.getOkrbyTeam);
+router.get(
+  "/key-results/user",
+  isAuthenticated,
+  GoalController.getOkrsByUserId
+);
+router.get(
+  "/key-results/team/:id",
+  isAuthenticated,
+  GoalController.getOkrbyTeam
+);
 module.exports = router;

@@ -12,6 +12,10 @@ router.put("/reset-password/:id/:token", UserController.ResetPassword);
 
 router.get("/get/:department", UserController.getEmployeesByDepartment);
 
-router.get("/notifications", isAuthenticated, NotificationController.getNotifications);
+router.get(
+  "/notifications",
+  isAuthenticated,
+  NotificationController.getNotifications
+);
 
 module.exports = router;
