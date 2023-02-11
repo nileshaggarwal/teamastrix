@@ -7,13 +7,11 @@ const keySchema = new mongoose.Schema({
     ref: "User",
     default: null,
   },
-  assigned_to_teams: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
-      default: null,
-    },
-  ],
+  assigned_to_teams: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Team",
+    default: null,
+  },
   due_date_key: Date,
   type: {
     type: String,
