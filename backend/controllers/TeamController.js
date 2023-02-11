@@ -227,6 +227,18 @@ class TeamController {
 
     return HelperResponse.success(res, "Team updated successfully", team);
   });
+
+  static getTeamByLeader = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+
+    let team = await Team.findOne({ leader: id }).lean();
+
+    if (!team) {
+      return next(new CustomErrorHandler(400, "Team not found"));
+    }
+
+    return HelperResponse.success(res, "Team fetched successfully", team);
+  });
 }
 
 module.exports = TeamController;

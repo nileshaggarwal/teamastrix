@@ -7,11 +7,7 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const {
-  JWT_SECRET,
-  JWT_EXPIRES_IN,
-  CHANGE_PASSWORD_URL,
-} = require("../config");
+const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
 
 class GoalController {
@@ -39,10 +35,7 @@ class GoalController {
       created_by: joi.string().allow("manager", "teamLead", "self"),
       linked_to: joi.string(),
       target_value: joi.string(),
-      target_type: joi
-        .string()
-        .allow("percentage", "number", "currency")
-        .required(),
+      target_type: joi.string().allow("percentage", "number", "currency").required(),
       due_date: joi.date(),
     });
     console.log(req.body, "body 2");
@@ -142,11 +135,7 @@ class GoalController {
       return next(new CustomErrorHandler(400, "Goal not found"));
     }
     console.log(goal, "goal");
-    return HelperResponse.success(
-      res,
-      "Key results added successfully",
-      key_results
-    );
+    return HelperResponse.success(res, "Key results added successfully", key_results);
   });
 
   static getGoals = catchAsync(async (req, res, next) => {
@@ -201,6 +190,29 @@ class GoalController {
       }
       await goal[0].save();
     }
+  });
+
+  static getOkrsByUserId = catchAsync(async (req, res, next) => {
+    const { id } = req.user;
+
+    const keyresults = await KeyResult.find({ assigned_to: id })
+      .populate("assigned_to", "name designation")
+      .populate("assigned_to_teams", "name")
+      .lean();
+
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
+  });
+
+  static getOkrbyTeam = catchAsync(async (req, res, next) => {
+    const { id } = req.user;
+    req.params;
+
+    const keyresults = await KeyResult.find({ assigned_to_teams: id })
+      .populate("assigned_to", "name designation")
+      .populate("assigned_to_teams", "name")
+      .lean();
+
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
   });
 }
 

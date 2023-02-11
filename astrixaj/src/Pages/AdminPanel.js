@@ -7,6 +7,7 @@ import AddTeam from "../Components/AdminPanel/AddTeam";
 import ManageOKR from "../Components/AdminPanel/ManageOKR";
 import ManageTeam from "../Components/AdminPanel/ManageTeam";
 import NotificationView from "../Components/AdminPanel/NotificationView";
+import MainPage from "../Components/MainPage";
 import { isAuthenticated } from "../Helpers/auth";
 
 const AdminPanel = () => {
@@ -20,6 +21,7 @@ const AdminPanel = () => {
       {chosenMenu === "manageOKR" && <ManageOKR />}
       {chosenMenu === "createOKR" && <AddManagerOKR />}
       {chosenMenu === "notification" && <NotificationView />}
+      {chosenMenu === "dashboard" && <MainPage />}
     </AdminLayout>
   );
 };
