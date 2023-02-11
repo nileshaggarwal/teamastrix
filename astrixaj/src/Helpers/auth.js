@@ -87,3 +87,17 @@ export const getNotifications = () => {
       console.log(err);
     });
 };
+
+export const getAi = (milestone) => {
+  return axios
+    .post(`${API}/goal/getAi/ai`, { milestone })
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

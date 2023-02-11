@@ -7,12 +7,9 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const {
-  JWT_SECRET,
-  JWT_EXPIRES_IN,
-  CHANGE_PASSWORD_URL,
-} = require("../config");
+const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
+const NotificationController = require("./NotificationController");
 
 class GoalController {
   static addObjective = catchAsync(async (req, res, next) => {
@@ -39,10 +36,7 @@ class GoalController {
       created_by: joi.string().allow("manager", "teamLead", "self"),
       linked_to: joi.string(),
       target_value: joi.number(),
-      target_type: joi
-        .string()
-        .allow("percentage", "number", "currency")
-        .required(),
+      target_type: joi.string().allow("percentage", "number", "currency").required(),
       due_date: joi.date(),
       value: joi.number(),
     });
@@ -74,6 +68,18 @@ class GoalController {
         value,
       },
     });
+
+    let allMembers = await User.find({ current_team: assigned_team });
+
+    for (let i = 0; i < allMembers.length; i++) {
+      await NotificationController.create(
+        created_by_id,
+        allMembers[i]._id,
+        "team",
+        `You have been added to ${name} goal`,
+        "Check your tasks now"
+      );
+    }
 
     return HelperResponse.success(res, "Objective created successfully", goal);
   });
@@ -144,11 +150,16 @@ class GoalController {
       return next(new CustomErrorHandler(400, "Goal not found"));
     }
     console.log(goal, "goal");
-    return HelperResponse.success(
-      res,
-      "Key results added successfully",
-      key_results
+
+    await NotificationController.create(
+      created_by_id_key,
+      assigned_to,
+      "team",
+      `You have been added to ${milestone} key result`,
+      "Check your tasks now"
     );
+
+    return HelperResponse.success(res, "Key results added successfully", key_results);
   });
 
   static getGoals = catchAsync(async (req, res, next) => {
@@ -218,11 +229,7 @@ class GoalController {
       .populate("assigned_to_teams", "name")
       .lean();
 
-    return HelperResponse.success(
-      res,
-      "Key results fetched successfully",
-      keyresults
-    );
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
   });
 
   static getOkrbyTeam = catchAsync(async (req, res, next) => {
@@ -234,11 +241,7 @@ class GoalController {
       .populate("assigned_to_teams", "name")
       .lean();
 
-    return HelperResponse.success(
-      res,
-      "Key results fetched successfully",
-      keyresults
-    );
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
   });
 }
 
