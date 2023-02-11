@@ -150,15 +150,18 @@ class GoalController {
   });
 
   static getGoals = catchAsync(async (req, res, next) => {
-    const goals = await Goal.find({
-      $and: [
-        {
-          "objective.linked_to": {
-            $exists: false,
-          },
-        },
-      ],
-    });
+    console.log("called");
+    const goals = await Goal.find({}).populate("key_results");
+
+    // const goals = await Goal.find({
+    //   $and: [
+    //     {
+    //       "objective.linked_to": {
+    //         $exists: false,
+    //       },
+    //     },
+    //   ],
+    // });
 
     return HelperResponse.success(res, "Goals fetched successfully", goals);
   });

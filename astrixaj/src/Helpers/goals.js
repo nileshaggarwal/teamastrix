@@ -40,3 +40,17 @@ export const createKeyResults = (data, id) => {
       toast.error(err.response.data.message);
     });
 };
+
+export const getAllGoals = () => {
+  return axios
+    .get(`${API}/goal/getAll`)
+    .then((res) => {
+      console.log(res);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
