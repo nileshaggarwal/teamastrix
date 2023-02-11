@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { BiArrowBack } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import EditTeamDetails from "./EditTeamDetails";
+import { getTeamById } from "../../Helpers/teams";
+import { ColorRing } from "react-loader-spinner";
 
 const HeaderPara = ({ text }) => {
-  return (
-    <p className="bg-amber-100 text-amber-900 px-2 py-3 rounded-t-md">{text}</p>
-  );
+  return <p className="bg-amber-100 text-amber-900 px-2 py-3 rounded-t-md">{text}</p>;
 };
 
 const TeamDetails = () => {
@@ -84,6 +84,20 @@ const TeamDetails = () => {
     Objectives: Objectives,
   });
 
+  const [teamMembersList, setTeamMembersList] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  const getTeam = async () => {
+    let res = await getTeamById(teamId);
+    console.log(res, "res");
+    setTeamMembersList(res);
+  };
+
+  useEffect(() => {
+    getTeam();
+    setLoading(false);
+  }, []);
+
   const teamDetails = {
     name: "MERN BLASTERS",
     department: {
@@ -101,6 +115,8 @@ const TeamDetails = () => {
 
   console.log(canEdit);
 
+  console.log(teamMembersList, "teamMembersList");
+
   return (
     <>
       <div>
@@ -108,7 +124,7 @@ const TeamDetails = () => {
         <div className="flex flex-col space-y-8 bg-white rounded-md px-4 py-6">
           <div className="flex items-center justify-between">
             <p className="font-semibold px-2">
-              Viewing Team <span>{"MERN BLASTERS"}</span>
+              Viewing Team :<span className="text-md text-blue-600">{teamMembersList.name}</span>
             </p>
             <div className="flex items-center space-x-4">
               <button
@@ -133,12 +149,46 @@ const TeamDetails = () => {
             <div className="basis-1/2 rounded-md border ">
               <HeaderPara text="Team Members" />
               <div className="flex flex-col divide-y h-96 divide-gray-400  overflow-y-scroll noscrollbar">
-                {teamMembers.map((member, index) => (
-                  <div className={"flex flex-col px-2 py-2 "}>
-                    <p className="font-medium">{member.name}</p>
-                    <p className="text-sm">{member.role}</p>
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <ColorRing
+                      visible={true}
+                      height="80"
+                      width="80"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{}}
+                      wrapperClass="blocks-wrapper"
+                      colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+                    />
                   </div>
-                ))}
+                ) : (
+                  <>
+                    <div className={"flex flex-col px-2 py-2 relative"}>
+                      <p className="font-medium">{teamMembersList?.leader?.name}</p>
+                      <p className="text-sm">Leader</p>
+                      <div className="absolute bottom-0 right-0 p-2">
+                        <p className="text-xs text-blue-500 font-semibold">
+                          {teamMembersList?.leader?.designation}
+                        </p>
+                      </div>
+                    </div>
+                    {teamMembersList?.members?.map((member, index) => {
+                      if (member._id !== teamMembersList.leader._id) {
+                        return (
+                          <div className={"flex flex-col px-2 py-2 relative"}>
+                            <p className="font-medium">{member.name}</p>
+                            <p className="text-sm">Member</p>
+                            <div className="absolute bottom-0 right-0 p-2">
+                              <p className="text-xs text-blue-500 font-semibold">
+                                {member.designation}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })}
+                  </>
+                )}
               </div>
             </div>
             <div className="basis-1/2 rounded-md border ">
@@ -150,23 +200,15 @@ const TeamDetails = () => {
                       <div
                         className="radial-progress text-green-500 text-sm"
                         style={{
-                          "--value":
-                            (objective.acieved / objective.target) * 100,
+                          "--value": (objective.acieved / objective.target) * 100,
                           "--size": "3.5rem",
                           "--thickness": "2px",
                         }}
                       >
-                        {((objective.acieved / objective.target) * 100).toFixed(
-                          2
-                        )}
-                        %
+                        {((objective.acieved / objective.target) * 100).toFixed(2)}%
                       </div>
                     </div>
-                    <div
-                      className={
-                        "flex flex-col px-2 py-2 grow justify-between basis-2/3 "
-                      }
-                    >
+                    <div className={"flex flex-col px-2 py-2 grow justify-between basis-2/3 "}>
                       <p className="font-medium">{objective.name}</p>
                       <p className="text-sm">
                         Status:{objective.acieved}
@@ -184,13 +226,9 @@ const TeamDetails = () => {
                       </p>
                     </div>
                     <div
-                      className={
-                        "flex flex-col px-2 py-2 grow justify-between basis-1/3 text-sm "
-                      }
+                      className={"flex flex-col px-2 py-2 grow justify-between basis-1/3 text-sm "}
                     >
-                      <p className="text-green-600">
-                        Assigned:{objective.assigned}
-                      </p>
+                      <p className="text-green-600">Assigned:{objective.assigned}</p>
                       <p className="text-red-600">Due:{objective.deadline}</p>
                     </div>
                   </div>
@@ -200,11 +238,12 @@ const TeamDetails = () => {
           </div>
         </div>
       </div>
-      {canEdit && (
+      {canEdit && teamMembersList && (
         <EditTeamDetails
           isOpen={canEdit}
           closeModal={() => setCanEdit(false)}
-          team={teamDetails}
+          team={teamMembersList}
+          setTeam={setTeam}
           handleChange={handleChange}
         />
       )}

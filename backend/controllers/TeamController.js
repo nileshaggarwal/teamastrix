@@ -6,11 +6,7 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const {
-  JWT_SECRET,
-  JWT_EXPIRES_IN,
-  CHANGE_PASSWORD_URL,
-} = require("../config");
+const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
 const NotificationController = require("./NotificationController");
 
@@ -140,17 +136,16 @@ class TeamController {
 
     await team.save();
 
-    return HelperResponse.success(
-      res,
-      "Team status changed successfully",
-      team
-    );
+    return HelperResponse.success(res, "Team status changed successfully", team);
   });
 
   static getTeam = catchAsync(async (req, res, next) => {
     const { id } = req.params;
 
-    const team = await Team.findById(id).populate("members", "name email");
+    const team = await Team.findById(id)
+      .populate("members", "name email designation")
+      .populate("leader", "name email designation")
+      .lean();
 
     if (!team) {
       return next(new CustomErrorHandler(400, "Team not found"));
@@ -183,6 +178,36 @@ class TeamController {
     await team.save();
 
     return HelperResponse.success(res, "Leader assigned successfully", team);
+  });
+
+  static updateTeam = catchAsync(async (req, res, next) => {
+    let { id } = req.params;
+
+    const { name, description, members } = req.body;
+
+    let team = await Team.findById(id);
+
+    if (!team) {
+      return next(new CustomErrorHandler(400, "Team not found"));
+    }
+
+    team.name = name;
+    team.description = description;
+    team.members = members;
+
+    await team.save();
+
+    await User.updateMany(
+      { _id: { $in: members } },
+      {
+        $set: {
+          assigned_to_team: true,
+          current_team: team._id,
+        },
+      }
+    );
+
+    return HelperResponse.success(res, "Team updated successfully", team);
   });
 }
 

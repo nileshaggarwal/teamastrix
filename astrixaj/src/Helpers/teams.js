@@ -117,3 +117,40 @@ export const assignLeader = (id, leader) => {
       toast.error(err.response.data.message);
     });
 };
+
+export const getTeamById = (id) => {
+  return axios
+    .get(`${API}/team/get/${id}`)
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
+
+export const updateTeam = (id, name, description, members) => {
+  return axios
+    .put(
+      `${API}/team/update/${id}`,
+      { name, description, members },
+      {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+      return res.data.success;
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};

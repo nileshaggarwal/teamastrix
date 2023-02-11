@@ -148,7 +148,7 @@ const NotificationView = () => {
   console.log(notifications, "notifications");
 
   return (
-    <div className="my-6 w-[400px] h-[800px] border border-gray-500 rounded-md m-auto overflow-y-scroll noscrollbar">
+    <div className="my-6 w-[400px] h-[800px] border border-gray-800 rounded-md m-auto overflow-y-scroll noscrollbar bg-gray-200">
       {loading ? (
         <div className="flex items-center justify-center">
           <ColorRing

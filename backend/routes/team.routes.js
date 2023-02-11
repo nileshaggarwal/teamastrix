@@ -10,4 +10,6 @@ router.get("/get/:id", TeamController.getTeam);
 router.put("/change-status/:id", isManager, TeamController.disableTeam);
 router.put("/assign-leader/:id/:leader_id", isManager, TeamController.assignLeader);
 
+router.put("/update/:id", isAuthenticated, isManager, TeamController.updateTeam);
+
 module.exports = router;
