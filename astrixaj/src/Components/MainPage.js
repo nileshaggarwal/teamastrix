@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { generateHeatMap } from "../Helpers/teams";
 
 const color = (value) => {
-  if (value < 40) {
+  console.log(value);
+  if (value < 25) {
     return "bg-red-500";
-  } else if (value < 70) {
+  } else if (value < 50) {
     return "bg-yellow-500";
+  } else if (value < 75) {
+    return "bg-orange-500";
   } else {
     return "bg-green-500";
   }
