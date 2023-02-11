@@ -190,6 +190,8 @@ class GoalController {
       }
       await goal[0].save();
     }
+
+    return HelperResponse.success(res, "Progress updated successfully");
   });
 
   static getOkrsByUserId = catchAsync(async (req, res, next) => {

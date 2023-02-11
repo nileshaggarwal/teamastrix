@@ -12,4 +12,6 @@ router.get("/get/:milestone", CommentController.getAllComments);
 
 router.get("/key-results/user", isAuthenticated, GoalController.getOkrsByUserId);
 router.get("/key-results/team/:id", isAuthenticated, GoalController.getOkrbyTeam);
+
+router.put("/update-progress/:id", isAuthenticated, GoalController.updateProgress);
 module.exports = router;
