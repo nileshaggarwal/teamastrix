@@ -103,7 +103,6 @@ export const getAllTeams = () => {
   return axios
     .get(`${API}/team/get-All`)
     .then((res) => {
-      console.log(res.data);
       if (res.data.success) {
         return res.data.data;
       }

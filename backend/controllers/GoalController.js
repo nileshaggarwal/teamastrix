@@ -7,11 +7,7 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const {
-  JWT_SECRET,
-  JWT_EXPIRES_IN,
-  CHANGE_PASSWORD_URL,
-} = require("../config");
+const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
 const sendEmail = require("../utils/sendEmail");
 
 class GoalController {
@@ -38,11 +34,8 @@ class GoalController {
       equal_percentage: joi.boolean(),
       created_by: joi.string().allow("manager", "teamLead", "self"),
       linked_to: joi.string(),
-      target_value: joi.string(),
-      target_type: joi
-        .string()
-        .allow("percentage", "number", "currency")
-        .required(),
+      target_value: joi.number(),
+      target_type: joi.string().allow("percentage", "number", "currency").required(),
       due_date: joi.date(),
     });
     console.log(req.body, "body 2");
@@ -99,8 +92,8 @@ class GoalController {
       assigned_to_teams: joi.array(),
       due_date_key: joi.date(),
       type: joi.string().allow("percentage", "number", "currency"),
-      value: joi.string(),
-      target_value: joi.string(),
+      value: joi.number(),
+      target_value: joi.number().required(),
       linked_to: joi.string(),
       created_by_key: joi.string().allow("manager", "teamLead", "self"),
       created_by_id_key: joi.string(),
@@ -142,11 +135,7 @@ class GoalController {
       return next(new CustomErrorHandler(400, "Goal not found"));
     }
     console.log(goal, "goal");
-    return HelperResponse.success(
-      res,
-      "Key results added successfully",
-      key_results
-    );
+    return HelperResponse.success(res, "Key results added successfully", key_results);
   });
 
   static getGoals = catchAsync(async (req, res, next) => {
@@ -192,7 +181,41 @@ class GoalController {
           key_results: keygoal._id,
         },
       });
+      goal = await KeyResult.populate(goal, { path: "key_results" });
+      let total2 = 0;
+      goal[0].key_results.forEach((key) => {
+        total2 = total2 + parseInt(key.value);
+      });
+      if (goal[0].objective.target_type === "percentage") {
+        goal[0].objective.value = total2 / goal[0].key_results.length;
+      } else {
+        goal[0].objective.value = total2;
+      }
+      await goal[0].save();
     }
+  });
+
+  static getOkrsByUserId = catchAsync(async (req, res, next) => {
+    const { id } = req.user;
+
+    const keyresults = await KeyResult.find({ assigned_to: id })
+      .populate("assigned_to", "name designation")
+      .populate("assigned_to_teams", "name")
+      .lean();
+
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
+  });
+
+  static getOkrbyTeam = catchAsync(async (req, res, next) => {
+    const { id } = req.user;
+    req.params;
+
+    const keyresults = await KeyResult.find({ assigned_to_teams: id })
+      .populate("assigned_to", "name designation")
+      .populate("assigned_to_teams", "name")
+      .lean();
+
+    return HelperResponse.success(res, "Key results fetched successfully", keyresults);
   });
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ViewOKRS = () => {
+const ViewOKRSOLD = () => {
   return (
     <div className="w-full h-full ">
       <div className="text-[20px] font-[700] py-3">Objectives</div>
@@ -29,4 +29,4 @@ const ViewOKRS = () => {
   );
 };
 
-export default ViewOKRS;
+export default ViewOKRSOLD;

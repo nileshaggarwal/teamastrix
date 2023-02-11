@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { CgOrganisation } from "react-icons/cg";
 import { Disclosure, Transition } from "@headlessui/react";
 import { BsDashLg } from "react-icons/bs";
-
+import { MdVpnKey } from "react-icons/md";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import Header from "../Header";
 
@@ -17,7 +17,9 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   return (
     <div className="py-3 px-3 ">
       <button
-        onClick={() => (setChosenMenu ? setChosenMenu(value) : changeLocation(value))}
+        onClick={() =>
+          setChosenMenu ? setChosenMenu(value) : changeLocation(value)
+        }
         className={
           "flex items-center justify-start space-x-1 text-gray-600 hover:text-blue-500 " +
           (value === chosenMenu && "text-blue-600")
@@ -30,7 +32,14 @@ const Option = ({ chosenMenu, value, option, setChosenMenu, icon }) => {
   );
 };
 
-const Layout = ({ children, chosenMenu, setChosenMenu, createStore, isOpen, isOpen2 }) => {
+const Layout = ({
+  children,
+  chosenMenu,
+  setChosenMenu,
+  createStore,
+  isOpen,
+  isOpen2,
+}) => {
   useEffect(() => {
     let gotovalue = localStorage.getItem("gotovalue");
     if (gotovalue) {
@@ -55,7 +64,9 @@ const Layout = ({ children, chosenMenu, setChosenMenu, createStore, isOpen, isOp
             {({ open }) => (
               <>
                 <Disclosure.Button
-                  className={"py-2 px-3 w-full text-left flex justify-between items-center "}
+                  className={
+                    "py-2 px-3 w-full text-left flex justify-between items-center "
+                  }
                 >
                   <div className="flex items-center">
                     <CgOrganisation className="mr-1 text-2xl" />
@@ -91,7 +102,14 @@ const Layout = ({ children, chosenMenu, setChosenMenu, createStore, isOpen, isOp
                       icon={<BsDashLg className="text-xs ml-4" />}
                       setChosenMenu={setChosenMenu}
                       value="createOKR"
-                      option={"Create OKR"}
+                      option={"Create Personal OKR"}
+                    />
+                    <Option
+                      chosenMenu={chosenMenu}
+                      icon={<MdVpnKey className="text-xs ml-4" />}
+                      setChosenMenu={setChosenMenu}
+                      value="OKR"
+                      option={"View OKR's"}
                     />
                   </Disclosure.Panel>
                 </Transition>

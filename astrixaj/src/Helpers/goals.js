@@ -45,7 +45,24 @@ export const getAllGoals = () => {
   return axios
     .get(`${API}/goal/getAll`)
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+      if (res.data.success) {
+        return res.data.data;
+      }
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+};
+export const getOkrsByUserId = () => {
+  return axios
+    .get(`${API}/goal/key-results/user`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
       if (res.data.success) {
         return res.data.data;
       }

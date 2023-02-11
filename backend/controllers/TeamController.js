@@ -6,7 +6,11 @@ const joi = require("joi");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 const HelperResponse = require("../utils/HelperResponse");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRES_IN, CHANGE_PASSWORD_URL } = require("../config");
+const {
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  CHANGE_PASSWORD_URL,
+} = require("../config");
 const sendEmail = require("../utils/sendEmail");
 const NotificationController = require("./NotificationController");
 
@@ -136,7 +140,11 @@ class TeamController {
 
     await team.save();
 
-    return HelperResponse.success(res, "Team status changed successfully", team);
+    return HelperResponse.success(
+      res,
+      "Team status changed successfully",
+      team
+    );
   });
 
   static getTeam = catchAsync(async (req, res, next) => {
@@ -218,6 +226,18 @@ class TeamController {
     );
 
     return HelperResponse.success(res, "Team updated successfully", team);
+  });
+
+  static getTeamByLeader = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+
+    let team = await Team.findOne({ leader: id }).lean();
+
+    if (!team) {
+      return next(new CustomErrorHandler(400, "Team not found"));
+    }
+
+    return HelperResponse.success(res, "Team fetched successfully", team);
   });
 }
 
