@@ -10,7 +10,7 @@ import ViewTeamOKR from "../../Components/User/ViewTeamOKR";
 
 const Dashboard = () => {
   const [chosenMenu, setChosenMenu] = useState("StoreForm");
-
+  console.log(chosenMenu, "chosenMenu");
   return (
     <div>
       <Layout chosenMenu={chosenMenu} setChosenMenu={setChosenMenu}>
