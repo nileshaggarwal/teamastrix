@@ -178,6 +178,17 @@ class GoalController {
           key_results: keygoal._id,
         },
       });
+      goal = await KeyResult.populate(goal, { path: "key_results" });
+      let total2 = 0;
+      goal[0].key_results.forEach((key) => {
+        total2 = total2 + parseInt(key.value);
+      });
+      if (goal[0].objective.target_type === "percentage") {
+        goal[0].objective.value = total2 / goal[0].key_results.length;
+      } else {
+        goal[0].objective.value = total2;
+      }
+      await goal[0].save();
     }
   });
 
