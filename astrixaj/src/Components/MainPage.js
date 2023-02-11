@@ -1,58 +1,45 @@
-import React from "react";
-const data = [
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-  {
-    id: 1,
-    name: "OKR 1",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { generateHeatMap } from "../Helpers/teams";
 
 const color = (value) => {
-  if (value < 40 && value > 0) {
+  console.log(value);
+  if (value < 25) {
     return "bg-red-500";
-  } else if (value < 70 && value > 40) {
+  } else if (value < 50) {
     return "bg-yellow-500";
+  } else if (value < 75) {
+    return "bg-orange-500";
   } else {
     return "bg-green-500";
   }
 };
 
 const MainPage = () => {
-  let random = Math.floor(Math.random() * 100) + 1;
+  const [teams, setTeams] = useState([]);
+
+  async function getHeatMap() {
+    const response = await generateHeatMap();
+    setTeams(response);
+    if (!response) {
+      console.log("error");
+    }
+  }
+
+  useEffect(() => {
+    getHeatMap();
+  }, []);
+
   return (
     <div>
       <div>
         {/* <Header /> */}
-        <p className="text-xl p-5 text-blue-500">OKR HeatMap</p>
+        <p className="text-xl p-5 text-blue-500">Team HeatMap</p>
         <div className="flex flex-wrap gap-5 p-5 w-full m-auto">
-          {data.map((item) => (
+          {teams?.map((item) => (
             <div
               key={item.id}
               className={`w-[200px] h-[200px] ${color(
-                random
+                item.heat_map
               )} flex items-center justify-center text-lg rounded-md`}
             >
               <p>{item.name}</p>

@@ -13,6 +13,8 @@ import { isAuthenticated } from "../Helpers/auth";
 const AdminPanel = () => {
   const [chosenMenu, setChosenMenu] = useState("createTeam");
 
+  console.log(isAuthenticated(), "isAuthenticated()");
+
   return (
     <AdminLayout chosenMenu={chosenMenu} setChosenMenu={setChosenMenu}>
       {chosenMenu === "manageTeam" && <ManageTeam />}

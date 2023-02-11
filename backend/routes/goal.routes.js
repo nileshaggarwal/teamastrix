@@ -12,10 +12,26 @@ router.post("/add-comment", isAuthenticated, CommentController.addComment);
 router.get("/get/:milestone", CommentController.getAllComments);
 router.post("/getAi/ai", CommentController.getAiRecommendations);
 
-router.get("/key-results/user", isAuthenticated, GoalController.getOkrsByUserId);
-router.get("/key-results/team/:id", isAuthenticated, GoalController.getOkrbyTeam);
+router.get(
+  "/key-results/user",
+  isAuthenticated,
+  GoalController.getOkrsByUserId
+);
+router.get(
+  "/key-results/team/:id",
+  isAuthenticated,
+  GoalController.getOkrbyTeam
+);
 
-router.put("/update-progress/:id", isAuthenticated, GoalController.updateProgress);
+router.put(
+  "/update-progress/:id",
+  isAuthenticated,
+  GoalController.updateProgress
+);
 module.exports = router;
 
-router.put("/update-milestone/:id", isAuthenticated, GoalController.addMileStoneunderMileStone);
+router.put(
+  "/update-milestone/:id",
+  isAuthenticated,
+  GoalController.addMileStoneunderMileStone
+);

@@ -13,6 +13,7 @@ const {
 } = require("../config");
 const sendEmail = require("../utils/sendEmail");
 const NotificationController = require("./NotificationController");
+const { Goal } = require("../models/Goals");
 
 class TeamController {
   static createTeam = catchAsync(async (req, res, next) => {
@@ -226,6 +227,27 @@ class TeamController {
     );
 
     return HelperResponse.success(res, "Team updated successfully", team);
+  });
+
+  static generateHeatMap = catchAsync(async (req, res, next) => {
+    let teams = await Team.find({}).lean();
+    console.log(teams.length);
+    for (let i = 0; i < teams.length; i++) {
+      let team_id = teams[i]._id;
+
+      let teamGoals = await Goal.find({
+        "objective.assigned_team": team_id,
+      });
+      console.log(teamGoals.length);
+      let total = 0;
+      teamGoals.map(async (goal) => {
+        total = (goal.objective.value / goal.objective.target_value) * 100;
+      });
+      console.log(total);
+      total = total / teamGoals.length;
+      teams[i]["heat_map"] = total;
+    }
+    return HelperResponse.success(res, "Team fetched successfully", teams);
   });
 
   static getTeamByLeader = catchAsync(async (req, res, next) => {
